@@ -11,10 +11,15 @@ function createCookie(res, token){
 
 function hashPassword(password){
     return bcrypt.hashSync(password, 10, (err, hash) =>hash);
+};
+
+function comparePassword(password, hash){
+    return bcrypt.compareSync(password, hash, (err, isMatch) =>isMatch);
 }
 
 module.exports = {
     createToken,
     hashPassword,
     createCookie,
+    comparePassword
 }

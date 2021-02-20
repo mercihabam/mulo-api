@@ -1,5 +1,5 @@
 const User = require("../../../Database/models/users");
-const { hashPassword, createCookie, createToken } = require("../../../Utils/authentication");
+const { hashPassword, createCookie, createToken, comparePassword } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
 
 async function signup(req, res){
@@ -22,6 +22,25 @@ async function signup(req, res){
     }
 };
 
+async function login(req, res){
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email: email }});
+    if(user){
+        const passwordMatch = comparePassword(password, user.password);
+        if(passwordMatch){
+            const token = createToken(user.id);
+            createCookie(res, token);
+            sendResult(res, 200, null, "vous avez été connecté", user)
+        }else
+        {
+            sendResult(res, 403, "mot de passe incorrect", null, null)
+        }
+    }else{
+        sendResult(res, 401, "utilisateur inconnu", null, null)
+    }
+}
+
 module.exports = {
-    signup
+    signup,
+    login
 }

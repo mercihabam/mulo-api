@@ -20,6 +20,15 @@ async function checkRequiredFields(req, res, next){
     }
 };
 
+async function checkLoginFields(req, res, next){
+    const { email, password } = req.body;
+    if( email && password){
+        next();
+    }else{
+        sendResult(res, 500, "vous devez remplir tous les champs obligatoires", null, null)
+    }
+};
+
 async function checkPasswordMatch(req, res, next){
     const {password, confirmPassword} = req.body;
     if(password !== confirmPassword){
@@ -42,5 +51,6 @@ module.exports = {
     checkEmailExist,
     checkRequiredFields,
     checkPasswordMatch,
-    checkPasswordIsValid
+    checkPasswordIsValid,
+    checkLoginFields
 }
