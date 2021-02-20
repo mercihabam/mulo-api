@@ -22,7 +22,8 @@ module.exports = {
       email: {
           type: Sequelize.STRING(),
           allowNull: false,
-          required: true
+          required: true,
+          unique: true
       },
       password: {
           type: Sequelize.STRING(),
@@ -41,6 +42,10 @@ module.exports = {
         allowNull: true,
         required: false,
         defaultValue: null
+      },
+      isAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
     });
   },

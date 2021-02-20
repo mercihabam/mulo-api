@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const uuid = require("uuid");
+const sequelize = require("../connection/connection");
 
 module.exports = sequelize.define("Users", {
     id:{
@@ -20,7 +21,8 @@ module.exports = sequelize.define("Users", {
     email: {
         type: Sequelize.STRING(),
         allowNull: false,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: Sequelize.STRING(),
@@ -31,5 +33,9 @@ module.exports = sequelize.define("Users", {
         type: Sequelize.STRING(),
         allowNull: true,
         required: false
+    },
+    isAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     }
 });
