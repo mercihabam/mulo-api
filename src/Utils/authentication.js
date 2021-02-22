@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const userModel = require("../Database/models/users");
+const { sendResult } = require("./helper");
 
 function createToken(userId) {
     return jwt.sign({ userId: userId }, process.env.PRIVATE_KEY);
@@ -15,11 +17,31 @@ function hashPassword(password){
 
 function comparePassword(password, hash){
     return bcrypt.compareSync(password, hash, (err, isMatch) =>isMatch);
-}
+};
+
+function checkToken(req, res, next){
+    const authCookie = req.cookies.authCookie;
+
+    jwt.verify(authCookie, process.env.PRIVATE_KEY, async(err, data) =>{
+        if(err){
+            sendResult(res, 401, "vous devez posseder un jeton d'accès")
+        }else if(data){
+            const userId = data.userId;
+            const user = await userModel.findOne({ where: { id: userId } });
+            if(user){
+                req.user = user;
+                next();
+            }else{
+                sendResult(res, 403, "jeton d'accès incorrect", null, null);
+            }
+        }
+    })
+};
 
 module.exports = {
     createToken,
     hashPassword,
     createCookie,
-    comparePassword
+    comparePassword,
+    checkToken,
 }
