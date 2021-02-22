@@ -34,11 +34,40 @@ async function updateCompany(req, res){
             sendResult(res, 200, null, "informations de l'entreprise mises à jour")
         }
     }else{
-        sendResult(res, 500, "company not found", null, null)
+        sendResult(res, 404, "company not found", null, null)
     }
 };
+
+async function deleteCompany(req, res){
+    const company = await CompanyModel.findOne({ where: { id: req.params.id } });
+    if(company){
+        const deleted = await company.update({ deletedAt: new Date() });
+        if(deleted){
+            sendResult(res, 200, null, "entreprise supprimée")
+        }
+    }else{
+        sendResult(res, 404, "company not found", null, null)
+    }
+};
+
+async function getCompanys(req, res){
+    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null }, limit: 10, offset: parseInt(req.query.offset) });
+    sendResult(res, 200, null, null, companys);
+};
+
+async function getCompanyById(req, res){
+    const company = await CompanyModel.findOne({ where: { id: req.params.id } });
+    if(company){
+        sendResult(res, 200, null, null, company);
+    }else{
+        sendResult(res, 404, "company not found", null, null);
+    }
+}
 
 module.exports = {
     createCompany,
     updateCompany,
+    deleteCompany,
+    getCompanys,
+    getCompanyById,
 }
