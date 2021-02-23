@@ -28,7 +28,7 @@ module.exports = sequelize.define("Menus", {
         allowNull: true,
         required: false
     },
-    reeady:{
+    ready:{
         type: Sequelize.BOOLEAN,
         allowNull: true,
         defaultValue: false
@@ -37,6 +37,11 @@ module.exports = sequelize.define("Menus", {
         type: Sequelize.STRING(),
         allowNull: true,
         required: false
+    },
+    ingredients: {
+        type: Sequelize.TEXT(),
+        allowNull: false,
+        required: true
     },
     companyId: {
         type: Sequelize.UUID,

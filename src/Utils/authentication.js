@@ -38,10 +38,19 @@ function checkToken(req, res, next){
     })
 };
 
+function checkIsAdmin(req, res, next){
+    if(req.user.isAdmin){
+        next();
+    }else{
+        sendResult(res, 401, "vous n'etes pas autorisé à éxecuter cette action", null, null)
+    }
+};
+
 module.exports = {
     createToken,
     hashPassword,
     createCookie,
     comparePassword,
     checkToken,
+    checkIsAdmin
 }
