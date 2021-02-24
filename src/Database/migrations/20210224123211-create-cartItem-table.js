@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         defaultValue: uuid.v4()
       },
-      cartId:{
+      userId:{
           type: Sequelize.UUID,
           allowNull: false
       },
@@ -21,10 +21,15 @@ module.exports = {
           type: Sequelize.INTEGER(),
           allowNull: false
       },
+      ordered: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+      },
       createdAt: {
           type: Sequelize.DATE(),
       },
-      updateddAt: {
+      updatedAt: {
           type: Sequelize.DATE(),
           allowNull: true,
           required: false,

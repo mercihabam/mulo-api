@@ -2,13 +2,13 @@ const Sequelize = require("sequelize");
 const uuid = require("uuid");
 const sequelize = require("../connection/connection");
 
-module.exports = sequelize.define("Carts", {
+module.exports = sequelize.define("CartItems", {
     id:{
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: uuid.v4()
     },
-    cartId:{
+    userId:{
         type: Sequelize.UUID,
         allowNull: false
     },
@@ -20,10 +20,15 @@ module.exports = sequelize.define("Carts", {
         type: Sequelize.INTEGER(),
         allowNull: false
     },
+    ordered: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
     createdAt: {
         type: Sequelize.DATE(),
     },
-    updateddAt: {
+    updatedAt: {
         type: Sequelize.DATE(),
         allowNull: true,
         required: false,
