@@ -6,7 +6,8 @@ async function checkRequiredFields(req, res, next){
     if(name && adress && type && tel1){
         next();
     }else{
-        sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null)
+        sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null);
+        console.log(req.body);
     }
 };
 
@@ -32,8 +33,20 @@ async function checkCompanyTel(req, res, next){
     }
 };
 
+async function checkCompanyEmail(req, res, next){
+    const { email } = req.body;
+
+    const company = await CompanyModel.findOne({ where: { email: email } });
+    if(company){
+        sendResult(res, 403, "une autre entreprise utilise déjà cet adresse mail", null, null)
+    }else{
+        next();
+    }
+};
+
 module.exports = {
     checkRequiredFields,
     checkCompanyName,
     checkCompanyTel,
+    checkCompanyEmail,
 }

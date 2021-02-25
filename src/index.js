@@ -12,7 +12,8 @@ require("./Database/connection/connection");
 
 //middlwares
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 //Routes
 app.use("/Api/v1", Routes);

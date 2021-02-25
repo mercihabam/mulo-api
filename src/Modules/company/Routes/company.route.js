@@ -1,13 +1,14 @@
 const express = require("express");
 const { checkToken } = require("../../../Utils/authentication");
-const { createCompany, updateCompany, deleteCompany, getCompanys, getCompanyById } = require("../controllers/company.controller");
-const { checkCompanyName, checkCompanyTel, checkRequiredFields } = require("../Validation/company.validation");
+const { createCompany, updateCompany, deleteCompany, getCompanys, getCompanyById, getCompanyByUser } = require("../controllers/company.controller");
+const { checkCompanyName, checkCompanyTel, checkRequiredFields, checkCompanyEmail } = require("../Validation/company.validation");
 const companyRouter = express.Router();
 
-companyRouter.post("/create-company", checkToken, checkRequiredFields, checkCompanyName, checkCompanyTel, createCompany);
+companyRouter.post("/create-company", checkToken, checkRequiredFields, checkCompanyName, checkCompanyEmail, checkCompanyTel, createCompany);
 companyRouter.post("/update-company/:id", checkToken, updateCompany);
 companyRouter.get("/delete-company/:id", checkToken, deleteCompany);
 companyRouter.get("/all", getCompanys);
 companyRouter.get("/find-by-id/:id", getCompanyById);
+companyRouter.get("/find-by-user", checkToken, getCompanyByUser)
 
 module.exports = companyRouter;
