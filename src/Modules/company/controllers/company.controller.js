@@ -1,12 +1,12 @@
 const CompanyModel = require("../../../Database/models/companys");
 const { sendResult } = require("../../../Utils/helper");
+const fs = require("fs");
 
 async function createCompany(req, res){
-    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, icon, email } = req.body;
+    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, email } = req.body;
     const userId = req.user.id;
-
     const company = await CompanyModel.create({
-        name, adress, type, rccm, idNat, numImpot, icon, tel1, tel2, tel3, userId, email
+        name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, userId, email, icon: req.file.filename
     });
     if(company){
         sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company)
@@ -51,7 +51,7 @@ async function deleteCompany(req, res){
 };
 
 async function getCompanys(req, res){
-    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null }, limit: 10, offset: parseInt(req.query.offset) });
+    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
     sendResult(res, 200, null, null, companys);
 };
 

@@ -2,12 +2,11 @@ const { sendResult } = require("../../../Utils/helper");
 const CompanyModel = require("../../../Database/models/companys");
 
 async function checkRequiredFields(req, res, next){
-    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, icon } = req.body;
+    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3 } = req.body;
     if(name && adress && type && tel1){
         next();
     }else{
         sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null);
-        console.log(req.body);
     }
 };
 
