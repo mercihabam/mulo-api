@@ -11,6 +11,6 @@ menuRouter.post("/update-menu/:id", checkToken, updateMenu);
 menuRouter.get("/all", getMenus);
 menuRouter.get("/menusByCompany/:companyId", getMenusByCompany);
 menuRouter.get("/find-one/:id", getMenuById);
-menuRouter.get("menus-ready", getMenuReady);
+menuRouter.get("/menus-ready", getMenuReady);
 
 module.exports = menuRouter;
