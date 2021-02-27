@@ -2,8 +2,8 @@ const menuModel = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 
 function checkRequiredFields(req, res, next){
-    const { name, type, image, price, currency, companyId, ingredients} = req.body;
-    if(name && type && image && price && currency && companyId && ingredients){next()}else{
+    const { name, type, price, currency, companyId, ingredients} = req.body;
+    if(name && type && price && currency && companyId && ingredients){next()}else{
         sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null)
     }
 };
