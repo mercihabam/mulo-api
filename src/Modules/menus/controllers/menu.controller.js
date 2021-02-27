@@ -2,11 +2,11 @@ const menuModel = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 
 async function createMenu(req, res){
-    const { name, type, image, price, currency, ready, companyId, ingredients} = req.body;
+    const { name, type, price, currency, ready, companyId, ingredients} = req.body;
     const menu = await menuModel.create({
         name,
         type,
-        image,
+        image: req.file.filename,
         price,
         currency,
         ready,
