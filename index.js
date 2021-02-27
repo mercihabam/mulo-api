@@ -11,7 +11,8 @@ dotenv.config();
 
 //connect db
 require("./src/Database/connection/connection");
-// require("../public")
+//association
+require("./src/Database/associations/association");
 
 //middlwares
 app.use(cookieParser());

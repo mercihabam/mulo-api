@@ -53,7 +53,7 @@ async function updateMenu(req, res){
 };
 
 async function getMenus(req, res){
-    const menus = await menuModel.findAndCountAll({ where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    const menus = await menuModel.findAndCountAll({ include: "Resto", where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
     sendResult(res, 200, null, null, menus);
 };
 
@@ -63,7 +63,7 @@ async function getMenusByCompany(req, res){
 };
 
 async function getMenuById(req, res){
-    const menu = await menuModel.findOne({ where: { id: req.params.id } });
+    const menu = await menuModel.findOne({ where: { id: req.params.id }, include: "Resto" });
     if(menu){
         sendResult(res, 200, null, null, menu)
     }else{
@@ -72,7 +72,7 @@ async function getMenuById(req, res){
 };
 
 async function getMenuReady(req, res){
-    const menus = await menuModel.findAll({ where: { ready: true, deletedAt: null } });
+    const menus = await menuModel.findAll({ where: { ready: true, deletedAt: null }, include: "Resto" });
     sendResult(res, 200, null, null, menus);
 }
 

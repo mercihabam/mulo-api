@@ -56,7 +56,7 @@ async function getCompanys(req, res){
 };
 
 async function getCompanyById(req, res){
-    const company = await CompanyModel.findOne({ where: { id: req.params.id } });
+    const company = await CompanyModel.findOne({ where: { id: req.params.id }, include: "Menus" });
     if(company){
         sendResult(res, 200, null, null, company);
     }else{
