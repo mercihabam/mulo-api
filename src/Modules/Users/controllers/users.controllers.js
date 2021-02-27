@@ -38,9 +38,14 @@ async function login(req, res){
     }else{
         sendResult(res, 401, "utilisateur inconnu", null, null)
     }
-}
+};
+
+async function currentUser(req, res){
+    sendResult(res, 200, null, null, req.user)
+};
 
 module.exports = {
     signup,
-    login
+    login,
+    currentUser,
 }

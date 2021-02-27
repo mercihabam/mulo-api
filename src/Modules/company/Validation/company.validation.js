@@ -2,11 +2,11 @@ const { sendResult } = require("../../../Utils/helper");
 const CompanyModel = require("../../../Database/models/companys");
 
 async function checkRequiredFields(req, res, next){
-    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, icon } = req.body;
+    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3 } = req.body;
     if(name && adress && type && tel1){
         next();
     }else{
-        sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null)
+        sendResult(res, 403, "vous devez remplir tous les champs obligatoires", null, null);
     }
 };
 
@@ -32,8 +32,20 @@ async function checkCompanyTel(req, res, next){
     }
 };
 
+async function checkCompanyEmail(req, res, next){
+    const { email } = req.body;
+
+    const company = await CompanyModel.findOne({ where: { email: email } });
+    if(company){
+        sendResult(res, 403, "une autre entreprise utilise déjà cet adresse mail", null, null)
+    }else{
+        next();
+    }
+};
+
 module.exports = {
     checkRequiredFields,
     checkCompanyName,
     checkCompanyTel,
+    checkCompanyEmail,
 }
