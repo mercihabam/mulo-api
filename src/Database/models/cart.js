@@ -12,18 +12,6 @@ module.exports = sequelize.define("CartItems", {
         type: Sequelize.UUID,
         allowNull: false
     },
-    menuId:{
-        type: Sequelize.UUID,
-        allowNull: false
-    },
-    quantity:{
-        type: Sequelize.INTEGER(),
-        allowNull: false
-    },
-    cartId: {
-        type: Sequelize.UUID,
-        allowNull: false,
-    },
     ordered: {
         type: Sequelize.BOOLEAN,
         allowNull: true,
@@ -34,5 +22,11 @@ module.exports = sequelize.define("CartItems", {
     },
     updatedAt: {
         type: Sequelize.DATE(),
-    }
+    },
+    deletedAt: {
+        type: Sequelize.DATE(),
+        allowNull: true,
+        required: false,
+        defaultValue: null
+    },
 });
