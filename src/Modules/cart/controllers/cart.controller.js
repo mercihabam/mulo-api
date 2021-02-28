@@ -1,12 +1,15 @@
 const cartItem = require("../../../Database/models/cartItems");
 const { sendResult } = require("../../../Utils/helper");
+const uuid = require("uuid");
 
 async function addTocart(req, res){
     const { quantity } = req.body;
     const item = await cartItem.create({
+        id: uuid.v4(),
         menuId: req.params.menuId,
         quantity,
-        userId: req.user.id
+        userId: req.user.id,
+        cartId: req.cartId
     });
     if(item){
         sendResult(res, 201, null, "ajout au panier effectué", item)

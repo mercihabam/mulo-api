@@ -3,7 +3,7 @@ const uuid = require("uuid");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("CartItems", {
+    queryInterface.createTable("Carts", {
       id:{
         type: Sequelize.UUID,
         primaryKey: true,
@@ -13,33 +13,27 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false
       },
-      menuId:{
-          type: Sequelize.UUID,
-          allowNull: false
-      },
-      quantity:{
-          type: Sequelize.INTEGER(),
-          allowNull: false
-      },
-      cartId: {
-        type: Sequelize.UUID,
-        allowNull: false,
-      },
       ordered: {
-        type: Sequelize.BOOLEAN,
-        allowNull: true,
-        defaultValue: false
+          type: Sequelize.BOOLEAN,
+          allowNull: true,
+          defaultValue: false
       },
       createdAt: {
           type: Sequelize.DATE(),
       },
       updatedAt: {
           type: Sequelize.DATE(),
-      }
+      },
+      deletedAt: {
+          type: Sequelize.DATE(),
+          allowNull: true,
+          required: false,
+          defaultValue: null
+      },
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("CartItems");
+    queryInterface.dropTable("Carts");
   }
 };

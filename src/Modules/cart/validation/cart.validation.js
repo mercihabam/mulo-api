@@ -1,9 +1,10 @@
 const cartItem = require("../../../Database/models/cartItems");
+const Cart = require("../../../Database/models/cart");
 const { sendResult } = require("../../../Utils/helper");
 
 async function checkMenuExist(req, res, next){
     const { quantity } = req.body;
-    const item = await cartItem.findOne({ where: { userId: req.user.id, menuId: req.params.menuId } });
+    const item = await cartItem.findOne({ where: { userId: req.user.id, menuId: req.params.menuId, ordered: false } });
     if(item){
         const updated = await item.update({
             quantity: parseInt(item.quantity) + parseInt(quantity)
@@ -22,7 +23,22 @@ async function validQuantity(req, res, next){
     }
 };
 
+async function checkCartExist(req, res, next){
+    const cart = await Cart.findOne({ where: { userId: req.user.id, ordered: false } });
+    if(cart){
+        req.cartId = cart.id;
+        next();
+    }else{
+        const created = await Cart.create({
+            userId: req.user.id
+        });
+        req.cartId = created.id;
+        next()
+    }
+};
+
 module.exports = {
     checkMenuExist,
-    validQuantity
+    validQuantity,
+    checkCartExist
 };
