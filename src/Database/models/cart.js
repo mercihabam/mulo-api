@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const uuid = require("uuid");
 const sequelize = require("../connection/connection");
 
-module.exports = sequelize.define("CartItems", {
+module.exports = sequelize.define("Carts", {
     id:{
         type: Sequelize.UUID,
         primaryKey: true,
