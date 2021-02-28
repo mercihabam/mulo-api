@@ -41,7 +41,7 @@ async function updateMenu(req, res){
             image: image || menu.image,
             price: price || menu.price,
             currency: currency || menu.currency,
-            ready: ready || menu.ready,
+            ready: ready,
             companyId: companyId || menu.companyId,
             ingredients: ingredients || menu.ingredients,
             updatedAt: new Date()
