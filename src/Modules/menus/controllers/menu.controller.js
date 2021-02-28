@@ -74,7 +74,12 @@ async function getMenuById(req, res){
 async function getMenuReady(req, res){
     const menus = await menuModel.findAll({ where: { ready: true, deletedAt: null } });
     sendResult(res, 200, null, null, menus);
-}
+};
+
+async function getMenuReadyByCompany(req, res){
+    const menus = await menuModel.findAndCountAll({ where: { ready: true, companyId: req.params.companyId, deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    sendResult(res, 200, null, null, menus);
+};
 
 module.exports = {
     createMenu,
@@ -84,4 +89,5 @@ module.exports = {
     getMenusByCompany,
     getMenuById,
     getMenuReady,
+    getMenuReadyByCompany
 }
