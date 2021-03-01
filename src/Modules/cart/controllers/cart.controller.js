@@ -26,7 +26,7 @@ async function editItem(req, res){
 };
 
 async function getItemByUser(req, res){
-    const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
+    const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, include: "Menu",
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
     sendResult(res, 200, null, null, items);
 };
