@@ -13,6 +13,11 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false
       },
+      companyId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        required: true
+      },
       ordered: {
           type: Sequelize.BOOLEAN,
           allowNull: true,

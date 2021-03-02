@@ -17,6 +17,11 @@ module.exports = sequelize.define("Carts", {
         allowNull: true,
         defaultValue: false
     },
+    companyId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        required: true
+    },
     createdAt: {
         type: Sequelize.DATE(),
     },
