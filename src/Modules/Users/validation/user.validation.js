@@ -25,7 +25,7 @@ async function checkLoginFields(req, res, next){
     if( email && password){
         next();
     }else{
-        sendResult(res, 500, "vous devez remplir tous les champs obligatoires", null, null)
+        sendResult(res, 500, "vous devez remplir tous les champs obligatoires", null, null);
     }
 };
 

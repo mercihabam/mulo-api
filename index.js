@@ -2,17 +2,24 @@ const express = require('express');
 
 const app = express();
 const cookieParser = require("cookie-parser");
-const Routes = require("./Routes");
+const Routes = require("./src/Routes");
 const dotenv = require("dotenv");
+const bodyParser = require('body-parser');
+const cors = require("cors");
 
 dotenv.config();
 
 //connect db
-require("./Database/connection/connection");
+require("./src/Database/connection/connection");
+//association
+require("./src/Database/associations/association");
 
 //middlwares
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+app.use("/public", express.static('public'));
 
 //Routes
 app.use("/Api/v1", Routes);

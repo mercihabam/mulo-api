@@ -2,11 +2,11 @@ const menuModel = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 
 async function createMenu(req, res){
-    const { name, type, image, price, currency, ready, companyId, ingredients} = req.body;
+    const { name, type, price, currency, ready, companyId, ingredients} = req.body;
     const menu = await menuModel.create({
         name,
         type,
-        image,
+        image: req.file.filename,
         price,
         currency,
         ready,
@@ -41,7 +41,7 @@ async function updateMenu(req, res){
             image: image || menu.image,
             price: price || menu.price,
             currency: currency || menu.currency,
-            ready: ready || menu.ready,
+            ready: ready,
             companyId: companyId || menu.companyId,
             ingredients: ingredients || menu.ingredients,
             updatedAt: new Date()
@@ -53,7 +53,7 @@ async function updateMenu(req, res){
 };
 
 async function getMenus(req, res){
-    const menus = await menuModel.findAndCountAll({ where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    const menus = await menuModel.findAndCountAll({ include: "Resto", where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
     sendResult(res, 200, null, null, menus);
 };
 
@@ -63,12 +63,22 @@ async function getMenusByCompany(req, res){
 };
 
 async function getMenuById(req, res){
-    const menu = await menuModel.findOne({ where: { id: req.params.id } });
+    const menu = await menuModel.findOne({ where: { id: req.params.id }, include: "Resto" });
     if(menu){
         sendResult(res, 200, null, null, menu)
     }else{
         sendResult(res, 404, "menu not found", null, null)
     }
+};
+
+async function getMenuReady(req, res){
+    const menus = await menuModel.findAll({ where: { ready: true, deletedAt: null }, include: "Resto" });
+    sendResult(res, 200, null, null, menus);
+};
+
+async function getMenuReadyByCompany(req, res){
+    const menus = await menuModel.findAndCountAll({ where: { ready: true, companyId: req.params.companyId, deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    sendResult(res, 200, null, null, menus);
 };
 
 module.exports = {
@@ -77,5 +87,7 @@ module.exports = {
     updateMenu,
     getMenus,
     getMenusByCompany,
-    getMenuById
+    getMenuById,
+    getMenuReady,
+    getMenuReadyByCompany
 }
