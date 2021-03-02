@@ -47,7 +47,13 @@ async function login(req, res){
 
 async function currentUser(req, res){
     const user = await User.findOne({ where: { id: req.user.id }, include: [ { model: cartItems, where: { ordered: false }, as: "Items" } ]});
-    sendResult(res, 200, null, null, user)
+    if(user){
+        sendResult(res, 200, null, null, user)
+    }else{
+        const userm = await User.findOne({ where: { id: req.user.id }});
+        const user = { id: userm.id, firstName: userm.firstName, email: userm.email, lastName: userm.lastName, Items: [] }
+        sendResult(res, 200, null, null, user);
+    }
 };
 
 module.exports = {
