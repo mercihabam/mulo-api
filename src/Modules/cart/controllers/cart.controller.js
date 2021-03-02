@@ -1,4 +1,6 @@
 const cartItem = require("../../../Database/models/cartItems");
+const Cart = require("../../../Database/models/cart");
+const Menu = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
 
@@ -25,9 +27,10 @@ async function editItem(req, res){
     }else{ sendResult(res, 404, "item not found", null, null) }
 };
 
-async function getItemByUser(req, res){
-    const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
-        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+async function getItemByUserAndCompany(req, res){
+    // const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
+    //     limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    const items = await Cart.findOne({ where: { userId: req.user.id, ordered: false, companyId: req.params.companyId }, include: [ { model: cartItem, where: {ordered: false}, as: "Items", include: "Menu" } ] });
     sendResult(res, 200, null, null, items);
 };
 
@@ -42,6 +45,6 @@ async function deleteItem(req, res){
 module.exports = {
     addTocart,
     editItem,
-    getItemByUser,
+    getItemByUserAndCompany,
     deleteItem
 }
