@@ -9,7 +9,7 @@ Companys.hasMany(Menus, { as: "Menus", foreignKey: "companyId" });
 Menus.belongsTo(Companys, { as: "Resto", foreignKey: "companyId" });
 
 //cart-items with menus
-Menus.hasOne(cartitem, { as: "Menu", foreignKey: "menuId" });
+Menus.hasMany(cartitem, { as: "Item", foreignKey: "menuId" });
 cartitem.belongsTo(Menus, { as: "Menu", foreignKey: "menuId" });
 
 //user with cart-items
@@ -18,5 +18,3 @@ cartitem.belongsTo(User, { as: "User", foreignKey: "userId" });
 
 Cart.hasMany(cartitem, { as: "Items", foreignKey: "cartId" });
 cartitem.belongsTo(Cart, { as: "Cart", foreignKey: "cartId" });
-Menus.hasMany(cartitem, { as: "Item", foreignKey: "menuId" });
-cartitem.belongsTo(Menu, { as: "Menu", foreignKey: "menuId" });
