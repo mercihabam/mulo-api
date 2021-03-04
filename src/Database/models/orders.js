@@ -30,16 +30,12 @@ module.exports = sequelize.define("Orders", {
         type: Sequelize.UUID,
         allowNull: true
     },
-    quarter: {
+    adress: {
         type: Sequelize.STRING(),
         allowNull: false
     },
-    avenue: {
+    adress2: {
         type: Sequelize.STRING(),
-        allowNull: false
-    },
-    number: {
-        type: Sequelize.INTEGER(),
         allowNull: false
     },
     deliveredBy: {
