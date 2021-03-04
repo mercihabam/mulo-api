@@ -11,7 +11,6 @@ async function addTocart(req, res){
         menuId: req.params.menuId,
         quantity,
         userId: req.user.id,
-        cartId: req.cartId
     });
     if(item){
         sendResult(res, 201, null, "ajout au panier effectué", item)

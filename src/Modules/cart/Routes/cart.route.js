@@ -4,7 +4,7 @@ const { validQuantity, checkMenuExist, checkCartExist } = require("../validation
 
 const cartRouter = require("express").Router();
 
-cartRouter.post("/add-to-cart/:menuId", checkToken, validQuantity, checkMenuExist, checkCartExist, addTocart);
+cartRouter.post("/add-to-cart/:menuId", checkToken, validQuantity, checkMenuExist, addTocart);
 cartRouter.post("/edit-item/:id", checkToken, validQuantity, editItem);
 cartRouter.get("/get-items/:companyId", checkToken, getItemByUserAndCompany);
 cartRouter.get("/get-all-items", checkToken, getAllItemsByUser);
