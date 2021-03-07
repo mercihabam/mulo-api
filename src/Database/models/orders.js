@@ -38,9 +38,10 @@ module.exports = sequelize.define("Orders", {
         type: Sequelize.STRING(),
         allowNull: true
     },
-    deliveredBy: {
-        type: Sequelize.UUID,
-        allowNull: true
+    phoneNumber: {
+        type: Sequelize.INTEGER(),
+        allowNull: false,
+        required: false
     },
     createdAt: {
         type: Sequelize.DATE(),
