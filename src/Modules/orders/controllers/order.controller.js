@@ -9,7 +9,7 @@ async function createOrder(req, res){
 
     if( cartArray ){
         const cart = await Cart.create({ userId: req.user.id, ordered: true })
-        cartArray.forEach(item => {
+        cartArray.forEach(async(item) => {
             const cartItem = await CartItems.findOne({ where: { id: item } });
             if(cartItem){
                 await cartItem.update({

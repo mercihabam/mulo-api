@@ -36,7 +36,7 @@ module.exports = sequelize.define("Orders", {
     },
     adress2: {
         type: Sequelize.STRING(),
-        allowNull: false
+        allowNull: true
     },
     deliveredBy: {
         type: Sequelize.UUID,
@@ -56,5 +56,8 @@ module.exports = sequelize.define("Orders", {
         allowNull: true,
         required: false,
         defaultValue: null
-    }
+    },
+    updatedAt: {
+        type: Sequelize.DATE(),
+    },
 });

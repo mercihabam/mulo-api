@@ -36,8 +36,8 @@ module.exports = {
         allowNull: false
       },
       adress2: {
-          type: Sequelize.INTEGER(),
-          allowNull: false
+          type: Sequelize.STRING(),
+          allowNull: true
       },
       createdAt: {
           type: Sequelize.DATE(),
@@ -53,7 +53,10 @@ module.exports = {
           allowNull: true,
           required: false,
           defaultValue: null
-      }
+      },
+      updatedAt: {
+        type: Sequelize.DATE(),
+      },
     })
   },
 
