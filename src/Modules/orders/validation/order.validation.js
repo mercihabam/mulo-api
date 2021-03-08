@@ -13,6 +13,14 @@ function checkRequiredFields(req, res, next){
     }
 };
 
+function checkCode(req, res, next){
+    const { codeDelivery } = req.body;
+    if(codeDelivery){
+        next();
+    }else{ sendResult(res, 403, "vous devez fournir le code de livraison", null, null) }
+};
+
 module.exports = {
     checkRequiredFields,
+    checkCode,
 }
