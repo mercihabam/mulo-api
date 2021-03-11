@@ -1,6 +1,6 @@
 const cartItems = require("../../../Database/models/cartItems");
 const User = require("../../../Database/models/users");
-const { hashPassword, createCookie, createToken, comparePassword } = require("../../../Utils/authentication");
+const { hashPassword, createCookie, createToken, comparePassword, deleteCookie } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
 
 async function signup(req, res){
@@ -41,9 +41,10 @@ async function login(req, res){
     }
 };
 
-// async function logout(req, res){
-//     res.cookie.d
-// }
+async function logout(req, res){
+    deleteCookie(res);
+    sendResult(res, 200, null, "cookie deleted", null);
+};
 
 async function currentUser(req, res){
     const user = await User.findOne({ where: { id: req.user.id }, include: [ { model: cartItems, where: { ordered: false }, as: "Items" } ]});
@@ -60,4 +61,5 @@ module.exports = {
     signup,
     login,
     currentUser,
+    logout,
 }

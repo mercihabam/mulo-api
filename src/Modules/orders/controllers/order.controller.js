@@ -58,6 +58,12 @@ async function getOrdersByCompany(req, res){
         }
 };
 
+async function getOrdersByUser(req, res){
+    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, userId: req.params.userId },
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0 });
+    sendResult(res, 200, null, null, orders);
+};
+
 async function getDeliveredOrdersByCompany(req, res){
     const orders = await Orders.findAll({ where: { deletedAt : null, delivered: true }, 
         include: [{ model: Cart, as: "Cart", 
@@ -101,4 +107,5 @@ module.exports = {
     getOrderDetail,
     markAsDelivered,
     deleteOrder,
+    getOrdersByUser,
 }

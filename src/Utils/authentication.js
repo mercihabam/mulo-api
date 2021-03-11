@@ -11,6 +11,10 @@ function createCookie(res, token){
     res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
 };
 
+function deleteCookie(res){
+    res.clearCookie("authCookie")
+};
+
 function hashPassword(password){
     return bcrypt.hashSync(password, 10, (err, hash) =>hash);
 };
@@ -52,5 +56,6 @@ module.exports = {
     createCookie,
     comparePassword,
     checkToken,
-    checkIsAdmin
+    checkIsAdmin,
+    deleteCookie
 }
