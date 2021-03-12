@@ -23,14 +23,6 @@ module.exports = {
           allowNull: false,
           required: false
       },
-      cartId: {
-        type: Sequelize.UUID,
-        allowNull: true
-      },
-      itemId: {
-          type: Sequelize.UUID,
-          allowNull: true
-      },
       adress: {
         type: Sequelize.STRING(),
         allowNull: false

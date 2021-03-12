@@ -3,7 +3,7 @@ const uuid = require("uuid");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("Carts", {
+    queryInterface.createTable("OrderItems", {
       id:{
         type: Sequelize.UUID,
         primaryKey: true,
@@ -13,15 +13,25 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false
       },
-      ordered: {
+      orderId: {
+          type: Sequelize.UUID,
+          allowNull: true
+      },
+      itemId: {
+          type: Sequelize.UUID,
+          allowNull: false,
+          required: true
+      },
+      ready: {
           type: Sequelize.BOOLEAN,
-          allowNull: true,
           defaultValue: false
       },
-      createdAt: {
-          type: Sequelize.DATE(),
+      companyId: {
+          type: Sequelize.UUID,
+          allowNull: false,
+          required: true
       },
-      updatedAt: {
+      createdAt: {
           type: Sequelize.DATE(),
       },
       deletedAt: {
@@ -30,10 +40,13 @@ module.exports = {
           required: false,
           defaultValue: null
       },
+      updatedAt: {
+          type: Sequelize.DATE(),
+      },
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("Carts");
+    queryInterface.dropTable("OrderItems");
   }
 };

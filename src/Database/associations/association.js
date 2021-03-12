@@ -2,7 +2,7 @@ const Menus = require("../models/menus");
 const Companys = require("../models/companys");
 const cartitem = require("../models/cartItems");
 const User = require("../models/users");
-const Cart = require("../models/cart");
+const OrderItems = require("../models/orderItems");
 const Orders = require("../models/orders");
 
 //menus with companys
@@ -17,13 +17,9 @@ cartitem.belongsTo(Menus, { as: "Menu", foreignKey: "menuId" });
 User.hasMany(cartitem, { as: "Items", foreignKey: "userId" });
 cartitem.belongsTo(User, { as: "User", foreignKey: "userId" });
 
-Cart.hasMany(cartitem, { as: "Items", foreignKey: "cartId" });
-cartitem.belongsTo(Cart, { as: "Cart", foreignKey: "cartId" });
+Orders.hasMany(OrderItems, { as: "Items", foreignKey: "orderId" });
+OrderItems.belongsTo(Orders, { as: "Order", foreignKey: "orderId" });
 
-//orders with menus
-Menus.hasMany(Orders, { as: "Order", foreignKey: "itemId" });
-Orders.belongsTo(Menus, { as: "Item", foreignKey: "itemId" });
-
-//cart with orders
-Cart.hasOne(Orders, { as: "Cart", foreignKey: "cartId" });
-Orders.belongsTo(Cart, { as: "Cart", foreignKey: "cartId" });
+//cartItem with orderItems
+cartitem.hasOne(OrderItems, { as: "Item", foreignKey: "itemId" });
+OrderItems.belongsTo(cartitem, { as: "Item", foreignKey: "itemId" });
