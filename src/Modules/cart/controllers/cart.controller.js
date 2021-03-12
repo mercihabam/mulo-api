@@ -11,7 +11,6 @@ async function addTocart(req, res){
         menuId: req.params.menuId,
         quantity,
         userId: req.user.id,
-        cartId: req.cartId
     });
     if(item){
         sendResult(res, 201, null, "ajout au panier effectué", item)
@@ -42,9 +41,16 @@ async function deleteItem(req, res){
     }else{ sendResult(res, 404, "item not found", null, null) }
 };
 
+async function getAllItemsByUser(req, res){
+    const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
+        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0, include: "Menu" });
+        sendResult(res, 200, null, null, items);
+}
+
 module.exports = {
     addTocart,
     editItem,
     getItemByUserAndCompany,
-    deleteItem
+    deleteItem,
+    getAllItemsByUser
 }

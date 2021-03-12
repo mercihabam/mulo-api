@@ -23,7 +23,7 @@ module.exports = {
       },
       cartId: {
         type: Sequelize.UUID,
-        allowNull: false,
+        allowNull: true,
       },
       ordered: {
         type: Sequelize.BOOLEAN,

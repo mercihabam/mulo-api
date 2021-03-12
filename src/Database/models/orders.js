@@ -22,29 +22,18 @@ module.exports = sequelize.define("Orders", {
         allowNull: false,
         required: false
     },
-    cartId: {
-        type: Sequelize.UUID,
-        allowNull: true
-    },
-    itemId: {
-        type: Sequelize.UUID,
-        allowNull: true
-    },
-    quarter: {
+    adress: {
         type: Sequelize.STRING(),
         allowNull: false
     },
-    avenue: {
+    adress2: {
         type: Sequelize.STRING(),
-        allowNull: false
+        allowNull: true
     },
-    number: {
+    phoneNumber: {
         type: Sequelize.INTEGER(),
-        allowNull: false
-    },
-    deliveredBy: {
-        type: Sequelize.UUID,
-        allowNull: true
+        allowNull: false,
+        required: false
     },
     createdAt: {
         type: Sequelize.DATE(),
@@ -60,5 +49,8 @@ module.exports = sequelize.define("Orders", {
         allowNull: true,
         required: false,
         defaultValue: null
-    }
+    },
+    updatedAt: {
+        type: Sequelize.DATE(),
+    },
 });
