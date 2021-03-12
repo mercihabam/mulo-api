@@ -1,6 +1,6 @@
 const { checkToken } = require("../../../Utils/authentication");
 const { addTocart, editItem, deleteItem, getItemByUserAndCompany, getAllItemsByUser } = require("../controllers/cart.controller");
-const { validQuantity, checkMenuExist, checkCartExist } = require("../validation/cart.validation");
+const { validQuantity, checkMenuExist } = require("../validation/cart.validation");
 
 const cartRouter = require("express").Router();
 
