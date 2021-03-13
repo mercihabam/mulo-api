@@ -1,5 +1,4 @@
 const cartItem = require("../../../Database/models/cartItems");
-const Cart = require("../../../Database/models/cart");
 const Menu = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
