@@ -49,11 +49,6 @@ module.exports = sequelize.define("Companys", {
         allowNull: true,
         required: false
     },
-    userId: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        required: true
-    },
     tel1: {
         type: Sequelize.INTEGER(),
         allowNull: false,
