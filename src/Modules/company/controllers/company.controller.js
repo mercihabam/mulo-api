@@ -1,7 +1,7 @@
 const CompanyModel = require("../../../Database/models/companys");
 const CompanyUser = require("../../../Database/models/companyUser");
+const { createCompanyCookie } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
-const fs = require("fs");
 
 async function createCompany(req, res){
     const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, email } = req.body;
@@ -14,6 +14,18 @@ async function createCompany(req, res){
         if(companyUser){
             sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company)
         }
+    }
+};
+
+async function signCompany(req, res){
+    const { email, name } = req.body;
+    const company = await CompanyModel.findOne({ where: { email: email, name: name }});
+    if(company){
+        const token = createToken(company.id);
+        createCompanyCookie(res, token);
+        sendResult(res, 200, null, "vous avez été connecté", company)
+    }else{
+        sendResult(res, 401, "données incorrectes", null, null)
     }
 };
 
@@ -80,4 +92,5 @@ module.exports = {
     getCompanys,
     getCompanyById,
     getCompanyByUser,
+    signCompany
 }

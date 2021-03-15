@@ -11,7 +11,15 @@ function createCookie(res, token){
     res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
 };
 
+function createCompanyCookie(res, token){
+    res.cookie("companyCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
+};
+
 function deleteCookie(res){
+    res.clearCookie("authCookie")
+};
+
+function deleteCompanyCookie(res){
     res.clearCookie("authCookie")
 };
 
@@ -57,5 +65,7 @@ module.exports = {
     comparePassword,
     checkToken,
     checkIsAdmin,
-    deleteCookie
+    deleteCookie,
+    createCompanyCookie,
+    deleteCompanyCookie,
 }

@@ -1,5 +1,6 @@
 const { sendResult } = require("../../../Utils/helper");
 const CompanyModel = require("../../../Database/models/companys");
+const CompanyUser = require("../../../Database/models/companyUser");
 
 async function checkRequiredFields(req, res, next){
     const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3 } = req.body;
@@ -43,9 +44,14 @@ async function checkCompanyEmail(req, res, next){
     }
 };
 
+// function checkCompanyAdmin(data){
+//     return CompanyUser.findOne({ where: data });
+// }
+
 module.exports = {
     checkRequiredFields,
     checkCompanyName,
     checkCompanyTel,
     checkCompanyEmail,
+    // checkCompanyAdmin
 }
