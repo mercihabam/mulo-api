@@ -80,17 +80,11 @@ async function getCompanyById(req, res){
     }
 };
 
-async function getCompanyByUser(req, res){
-    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null, userId: req.user.id }, limit: 10, offset: parseInt(req.query.offset) || 0 });
-    sendResult(res, 200, null, null, companys);
-};
-
 module.exports = {
     createCompany,
     updateCompany,
     deleteCompany,
     getCompanys,
     getCompanyById,
-    getCompanyByUser,
     signCompany
 }
