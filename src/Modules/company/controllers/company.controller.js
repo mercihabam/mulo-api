@@ -1,6 +1,6 @@
 const CompanyModel = require("../../../Database/models/companys");
 const CompanyUser = require("../../../Database/models/companyUser");
-const { createCompanyCookie } = require("../../../Utils/authentication");
+const { createCompanyCookie, createToken } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
 
 async function createCompany(req, res){
@@ -80,11 +80,17 @@ async function getCompanyById(req, res){
     }
 };
 
+async function getCurrentCompany(req, res){
+    const company = req.company;
+    sendResult(res, 200, null, null, company)
+};
+
 module.exports = {
     createCompany,
     updateCompany,
     deleteCompany,
     getCompanys,
     getCompanyById,
-    signCompany
+    signCompany,
+    getCurrentCompany,
 }

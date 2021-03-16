@@ -1,7 +1,7 @@
 const express = require("express");
 const { uploadCompanyImage } = require("../../../Middlwares/upload");
-const { checkToken } = require("../../../Utils/authentication");
-const { createCompany, updateCompany, deleteCompany, getCompanys, getCompanyById, signCompany } = require("../controllers/company.controller");
+const { checkToken, checkCompanyToken } = require("../../../Utils/authentication");
+const { createCompany, updateCompany, deleteCompany, getCompanys, getCompanyById, signCompany, getCurrentCompany } = require("../controllers/company.controller");
 const { checkCompanyName, checkCompanyTel, checkRequiredFields, checkCompanyEmail } = require("../Validation/company.validation");
 const companyRouter = express.Router();
 
@@ -11,5 +11,6 @@ companyRouter.get("/delete-company/:id", checkToken, deleteCompany);
 companyRouter.get("/all", getCompanys);
 companyRouter.get("/find-by-id/:id", getCompanyById);
 companyRouter.post("/sign-company", checkToken, signCompany);
+companyRouter.get("/current-company", checkToken, checkCompanyToken, getCurrentCompany);
 
 module.exports = companyRouter;
