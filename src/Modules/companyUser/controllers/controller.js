@@ -13,6 +13,16 @@ async function createCompanyUser(req, res){
     }
 };
 
+async function getCurrentCompanyUser(req, res){
+    const user = await CompanyUser.findOne({ where: { companyId: req.company.id, userId: req.user.id } });
+    if(user){
+        sendResult(res, 200, null, null, user)
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+};
+
 module.exports = {
     createCompanyUser,
+    getCurrentCompanyUser,
 }

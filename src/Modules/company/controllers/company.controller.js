@@ -40,6 +40,11 @@ async function signCompany(req, res){
     }
 };
 
+async function signOut(req, res){
+    res.clearCookie("companyCookie");
+    sendResult(res, 200, null, "vous avez été deconnecté", null)
+};
+
 async function updateCompany(req, res){
     const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, icon, email } = req.body;
     const company = await CompanyModel.findOne({ where: { id: req.params.id } });
@@ -103,5 +108,6 @@ module.exports = {
     getCompanys,
     getCompanyById,
     signCompany,
+    signOut,
     getCurrentCompany,
 }
