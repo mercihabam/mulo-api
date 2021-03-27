@@ -56,7 +56,7 @@ function checkCompanyToken(req, res, next){
 
     jwt.verify(companyCookie, process.env.PRIVATE_KEY, async(err, data) =>{
         if(err){
-            sendResult(res, 401, "vous devez posseder un jeton d'accès")
+            sendResult(res, 402, "vous devez posseder un jeton d'accès", null, null)
         }else if(data){
             const userId = data.userId;
             const company = await companys.findOne({ where: { id: userId } });

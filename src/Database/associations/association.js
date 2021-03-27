@@ -23,3 +23,7 @@ OrderItems.belongsTo(Orders, { as: "Order", foreignKey: "orderId" });
 //cartItem with orderItems
 cartitem.hasOne(OrderItems, { as: "Item", foreignKey: "itemId" });
 OrderItems.belongsTo(cartitem, { as: "Item", foreignKey: "itemId" });
+
+//orders with users
+User.hasMany(Orders, { as: "Orders", foreignKey: "userId" });
+Orders.belongsTo(User, { as: "User", foreignKey: "userId" });

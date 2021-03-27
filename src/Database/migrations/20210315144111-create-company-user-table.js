@@ -20,7 +20,7 @@ module.exports = {
           required: true
       },
       role: {
-          type: Sequelize.INTEGER(),
+          type: Sequelize.STRING(),
           allowNull: false,
           required: true
       },

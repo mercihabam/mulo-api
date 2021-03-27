@@ -1,6 +1,7 @@
 const CartItems = require("../../../Database/models/cartItems");
 const Menus = require("../../../Database/models/menus");
 const Orders = require("../../../Database/models/orders");
+const Users = require("../../../Database/models/users");
 const OrderItems = require("../../../Database/models/orderItems");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
@@ -33,7 +34,8 @@ async function createOrder(req, res){
 
 async function getOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null },
-        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0 });
+        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
+        include: "User"  });
     sendResult(res, 200, null, null, orders);
 };
 
@@ -45,13 +47,21 @@ async function getOrder(req, res){
 async function getOrderItemsByOrder(req, res){
     const orders = await OrderItems.findAndCountAll({ where: { deletedAt : null, orderId: req.params.orderId },
         limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
-        include: [ { model: CartItems, as: "Item", include: "Menu" } ] });
+        include: [ { model: CartItems, as: "Item", include: [{ model: Menus, as: "Menu", include: "Resto" }] } ] });
     sendResult(res, 200, null, null, orders);
 };
 
 async function getDeliveredOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: true },
-        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0 });
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
+        include: "User"  });
+    sendResult(res, 200, null, null, orders);
+};
+
+async function getUnDeliveredOrders(req, res){
+    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false },
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
+        include: "User"  });
     sendResult(res, 200, null, null, orders);
 };
 
@@ -96,6 +106,7 @@ module.exports = {
     getOrders,
     getOrder,
     getDeliveredOrders,
+    getUnDeliveredOrders,
     getOrderItemsByCompany,
     getOrderItemsByOrder,
     markAsDelivered,
