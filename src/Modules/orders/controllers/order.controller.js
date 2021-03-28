@@ -84,10 +84,10 @@ async function markAsDelivered(req, res){
 
     const order = await Orders.findOne({ where: { id: req.params.orderId } });
     if(order){
-        if(order.codeDelivery === codeDelivery){
+        if(order.codeDelivery === parseInt(codeDelivery)){
             const updated = await order.update({ delivered: true, deliveredAt: new Date() });
             if(updated){ sendResult(res, 200, null, "commande marqué comme livré", updated) }
-        }else{ sendResult(res, 403, " code de livraison incorrect ") }
+        }else{ sendResult(res, 403, " code de livraison incorrect ", null, null) }
     }else{
         sendResult(res, 404, " order not found ", null, null)
     }
