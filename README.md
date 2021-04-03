@@ -1,2 +1,2 @@
-# dish-backend
-dish is a food sales platform
+# Mulo-backend
+Mulo is a food sales platform
