@@ -5,6 +5,7 @@ const Users = require("../../../Database/models/users");
 const OrderItems = require("../../../Database/models/orderItems");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
+const { sendOrderToAdmin } = require("../../Mail/mail.service");
 
 async function createOrder(req, res){
     const { cartArray, adress, adress2, tel } = req.body;
@@ -30,6 +31,10 @@ async function createOrder(req, res){
             }
         }
     });
+    if(order){
+        sendOrderToAdmin(order.codeDelivery, cartArray.length);
+        console.log(order.codeDelivery);
+    }
 };
 
 async function getOrders(req, res){
@@ -60,6 +65,14 @@ async function getDeliveredOrders(req, res){
 
 async function getUnDeliveredOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false },
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
+        include: "User"  });
+    sendResult(res, 200, null, null, orders);
+};
+
+async function getRecentOrders(req, res){
+    let date = new Date();
+    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, createdAt : date.getDate() },
         limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
         include: "User"  });
     sendResult(res, 200, null, null, orders);
@@ -112,4 +125,5 @@ module.exports = {
     markAsDelivered,
     deleteOrder,
     getOrdersByUser,
+    getRecentOrders,
 }
