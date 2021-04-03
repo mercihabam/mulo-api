@@ -39,6 +39,11 @@ module.exports = sequelize.define("Companys", {
         required: true,
         unique: true
     },
+    password: {
+        type: Sequelize.STRING(),
+        allowNull: false,
+        required: true,
+    },
     adress: {
         type: Sequelize.TEXT(),
         allowNull: false,
@@ -48,11 +53,6 @@ module.exports = sequelize.define("Companys", {
         type: Sequelize.STRING(),
         allowNull: true,
         required: false
-    },
-    userId: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        required: true
     },
     tel1: {
         type: Sequelize.INTEGER(),

@@ -50,11 +50,6 @@ module.exports = {
           allowNull: true,
           required: false
       },
-      userId: {
-          type: Sequelize.UUID,
-          allowNull: false,
-          required: true
-      },
       tel1: {
         type: Sequelize.INTEGER(),
         allowNull: false,

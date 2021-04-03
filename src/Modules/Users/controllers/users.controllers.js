@@ -57,9 +57,21 @@ async function currentUser(req, res){
     }
 };
 
+async function getAllUsers(req, res){
+    const users = await User.findAndCountAll({ where: { deletedAt: null }, offset: parseInt(req.query.offset) || 0, limit: parseInt(req.query.limit) || 10000 });
+    sendResult(res, 200, null, null, users);
+};
+
+async function currentAdmin(req, res){
+    const user = req.user
+    sendResult(res, 200, null, null, user)
+};
+
 module.exports = {
     signup,
     login,
     currentUser,
     logout,
+    getAllUsers,
+    currentAdmin
 }

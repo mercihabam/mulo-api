@@ -1,16 +1,48 @@
 const CompanyModel = require("../../../Database/models/companys");
+const CompanyUser = require("../../../Database/models/companyUser");
+const { createCompanyCookie, createToken, comparePassword, hashPassword } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
-const fs = require("fs");
+const { checkIsCompanyUser } = require("../Validation/company.validation");
 
 async function createCompany(req, res){
-    const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, email } = req.body;
+    const { name, adress, type, rccm, numImpot, password, idNat, tel1, tel2, tel3, email } = req.body;
     const userId = req.user.id;
+    const hashed = hashPassword(password);
     const company = await CompanyModel.create({
-        name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, userId, email, icon: req.file.filename
+        name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: req.file.filename,
+        password: hashed
     });
     if(company){
-        sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company)
+        const companyUser = await CompanyUser.create({ userId: userId, companyId: company.id, role: "ADMIN" });
+        if(companyUser){
+            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company)
+        }
     }
+};
+
+async function signCompany(req, res){
+    const { name, password } = req.body;
+    const company = await CompanyModel.findOne({ where: { name: name }});
+    if(company){
+        const passwordMatch = comparePassword(password, company.password);
+        if(passwordMatch){
+            const companyUser = await checkIsCompanyUser({ userId: req.user.id, companyId: company.id });
+            if(companyUser){
+                const token = createToken(company.id);
+                createCompanyCookie(res, token);
+                sendResult(res, 200, null, "vous avez été connecté", company)
+            }else{ sendResult(res, 401, "Vous devez etre membre de cette entrepse pour s'y connecter", null, null) }
+        }else{
+            sendResult(res, 401, "mot de passe incorrect", null, null)
+        }
+    }else{
+        sendResult(res, 401, "Nom d'entreprise incorrect", null, null)
+    }
+};
+
+async function signOut(req, res){
+    res.clearCookie("companyCookie");
+    sendResult(res, 200, null, "vous avez été deconnecté", null)
 };
 
 async function updateCompany(req, res){
@@ -64,9 +96,9 @@ async function getCompanyById(req, res){
     }
 };
 
-async function getCompanyByUser(req, res){
-    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null, userId: req.user.id }, limit: 10, offset: parseInt(req.query.offset) || 0 });
-    sendResult(res, 200, null, null, companys);
+async function getCurrentCompany(req, res){
+    const company = req.company;
+    sendResult(res, 200, null, null, company)
 };
 
 module.exports = {
@@ -75,5 +107,7 @@ module.exports = {
     deleteCompany,
     getCompanys,
     getCompanyById,
-    getCompanyByUser,
+    signCompany,
+    signOut,
+    getCurrentCompany,
 }

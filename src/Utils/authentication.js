@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const userModel = require("../Database/models/users");
 const { sendResult } = require("./helper");
+const companys = require("../Database/models/companys");
 
 function createToken(userId) {
     return jwt.sign({ userId: userId }, process.env.PRIVATE_KEY);
@@ -11,7 +12,15 @@ function createCookie(res, token){
     res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
 };
 
+function createCompanyCookie(res, token){
+    res.cookie("companyCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
+};
+
 function deleteCookie(res){
+    res.clearCookie("authCookie")
+};
+
+function deleteCompanyCookie(res){
     res.clearCookie("authCookie")
 };
 
@@ -42,6 +51,25 @@ function checkToken(req, res, next){
     })
 };
 
+function checkCompanyToken(req, res, next){
+    const companyCookie = req.cookies.companyCookie;
+
+    jwt.verify(companyCookie, process.env.PRIVATE_KEY, async(err, data) =>{
+        if(err){
+            sendResult(res, 402, "vous devez posseder un jeton d'accès", null, null)
+        }else if(data){
+            const userId = data.userId;
+            const company = await companys.findOne({ where: { id: userId } });
+            if(company){
+                req.company = company;
+                next();
+            }else{
+                sendResult(res, 403, "jeton d'accès incorrect", null, null);
+            }
+        }
+    })
+};
+
 function checkIsAdmin(req, res, next){
     if(req.user.isAdmin){
         next();
@@ -57,5 +85,8 @@ module.exports = {
     comparePassword,
     checkToken,
     checkIsAdmin,
-    deleteCookie
+    deleteCookie,
+    createCompanyCookie,
+    deleteCompanyCookie,
+    checkCompanyToken,
 }
