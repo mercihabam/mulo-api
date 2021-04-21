@@ -21,8 +21,19 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use("/public", express.static('public'));
 
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://example2.com']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 //Routes
-app.use("/Api/v1", Routes);
+app.use("/Api/v1", cors(corsOptions), Routes);
 
 
 const PORT = process.env.PORT || 8000
