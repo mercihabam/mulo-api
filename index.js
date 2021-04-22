@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use("/public", express.static('public'));
 
-const whitelist = ['https://mulo-food.herokuapp.com', 'http://127.0.0.1:3000']
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
