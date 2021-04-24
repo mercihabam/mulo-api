@@ -29,11 +29,12 @@ const corsOptions = {
     } else {
       callback(new Error('origin' + origin + 'Not allowed by CORS'))
     }
-  }
+  },
 }
 
 //Routes
-app.use("/Api/v1", cors(corsOptions), Routes);
+app.use("/Api/v1", Routes);
+app.use(cors(corsOptions))
 
 
 const PORT = process.env.PORT || 8000
