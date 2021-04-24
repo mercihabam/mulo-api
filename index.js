@@ -30,6 +30,7 @@ const corsOptions = {
       callback(new Error('origin' + origin + 'Not allowed by CORS'))
     }
   },
+  credentials: true
 }
 
 //Routes
