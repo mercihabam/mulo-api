@@ -14,13 +14,6 @@ require("./src/Database/connection/connection");
 //association
 require("./src/Database/associations/association");
 
-//middlwares
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(cors());
-app.use("/public", express.static('public'));
-
 const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
@@ -33,9 +26,15 @@ const corsOptions = {
   credentials: true
 }
 
+//middlwares
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors(corsOptions))
+app.use("/public", express.static('public'));
+
 //Routes
 app.use("/Api/v1", Routes);
-app.use(cors(corsOptions))
 
 
 const PORT = process.env.PORT || 8000

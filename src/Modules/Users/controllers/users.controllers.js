@@ -31,9 +31,7 @@ async function login(req, res){
         if(passwordMatch){
             const token = createToken(user.id);
             // const cookie = createCookie(res, token);
-            const cookie = res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: true });
-            console.log("token is", token);
-            console.log("cookie is", cookie);
+            const cookie = res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: false });
             sendResult(res, 200, null, "vous avez été connecté", user)
         }else
         {
