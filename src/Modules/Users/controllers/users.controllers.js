@@ -30,8 +30,7 @@ async function login(req, res){
         const passwordMatch = comparePassword(password, user.password);
         if(passwordMatch){
             const token = createToken(user.id);
-            // const cookie = createCookie(res, token);
-            res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: true, sameSite: false});
+            createCookie(res, token);
             sendResult(res, 200, null, "vous avez été connecté", user)
         }else
         {

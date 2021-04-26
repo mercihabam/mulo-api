@@ -9,11 +9,11 @@ function createToken(userId) {
 };
 
 function createCookie(res, token){
-    res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: true });
+    res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: true, sameSite: "None" });
 };
 
 function createCompanyCookie(res, token){
-    res.cookie("companyCookie", token, { maxAge: 86400000, httpOnly: true, secure: true });
+    res.cookie("companyCookie", token, { maxAge: 86400000, httpOnly: true, secure: true, sameSite: "None" });
 };
 
 function deleteCookie(res){
