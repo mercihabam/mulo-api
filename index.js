@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const Routes = require("./src/Routes");
 const dotenv = require("dotenv");
 // const bodyParser = require('body-parser');
-const cors = require("cors");
+// const cors = require("cors");
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ const corsOptions = {
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 app.use("/public", express.static('public'));
 
 //Routes
