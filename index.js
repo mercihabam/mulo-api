@@ -26,22 +26,11 @@ const corsOptions = {
   credentials: true
 };
 
-const corsPublicOptions = {
-  origin: function (req, callback) {
-    if (whitelist.indexOf(req.header("Origin")) !== -1 && req.path) {
-      callback(null, true)
-    }else {
-      callback(new Error('path ' +  req.path + ' Not allowed by CORS'))
-    }
-  },
-  credentials: true
-}
-
 //middlwares
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("/public", cors(corsPublicOptions), express.static('public'));
+app.use("/public", express.static('public'));
 
 //Routes
 app.use("/Api/v1", cors(corsOptions), Routes);
