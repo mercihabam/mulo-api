@@ -16,7 +16,7 @@ require("./src/Database/associations/association");
 
 const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
 const corsOptions = {
-  origin: function (origin, path, callback) {
+  origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     }else if(path){
@@ -26,17 +26,27 @@ const corsOptions = {
     }
   },
   credentials: true
+};
+
+const corsPublicOptions = {
+  origin: function (req, callback) {
+    if (whitelist.indexOf(req.header("Origin")) !== -1 && req.path) {
+      callback(null, true)
+    }else {
+      callback(new Error('path ' +  req.path + ' Not allowed by CORS'))
+    }
+  },
+  credentials: true
 }
 
 //middlwares
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors(corsOptions))
-app.use("/public", express.static('public'));
+app.use("/public", cors(corsPublicOptions), express.static('public'));
 
 //Routes
-app.use("/Api/v1", Routes);
+app.use("/Api/v1", cors(corsOptions), Routes);
 
 
 const PORT = process.env.PORT || 8000
