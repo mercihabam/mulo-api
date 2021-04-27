@@ -16,11 +16,13 @@ require("./src/Database/associations/association");
 
 const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
+  origin: function (req, callback) {
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
       callback(null, true)
-    } else {
-      callback(new Error('origin' + origin + 'Not allowed by CORS'))
+    }else if(req.path){
+      callback(null, true)
+    }else {
+      callback(new Error('origin ' + req.header('Origin') + ' Not allowed by CORS'))
     }
   },
   credentials: true
