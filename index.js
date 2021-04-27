@@ -22,7 +22,7 @@ const corsOptions = {
     }else if(path){
       callback(null, true)
     }else {
-      callback(new Error('origin ' +  origin || path + ' Not allowed by CORS'))
+      callback(new Error('origin ' +  origin + ' Not allowed by CORS'))
     }
   },
   credentials: true
