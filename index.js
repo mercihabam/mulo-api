@@ -4,7 +4,6 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const Routes = require("./src/Routes");
 const dotenv = require("dotenv");
-// const bodyParser = require('body-parser');
 const cors = require("cors");
 
 dotenv.config();
@@ -14,7 +13,7 @@ require("./src/Database/connection/connection");
 //association
 require("./src/Database/associations/association");
 
-const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', "http://localhost:8000"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -28,8 +27,8 @@ const corsOptions = {
 
 //middlwares
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: false, limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use("/public", express.static('public'));
 
 //Routes
