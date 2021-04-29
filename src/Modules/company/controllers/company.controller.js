@@ -13,7 +13,7 @@ async function createCompany(req, res){
     if(uploadRes){  
         console.log(uploadRes);
         const company = await CompanyModel.create({
-            name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: toString(uploadRes.version)+"/"+uploadRes.public_id+"."+uploadRes.format,
+            name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
             password: hashed
         });
         if(company){

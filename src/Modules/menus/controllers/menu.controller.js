@@ -9,7 +9,7 @@ async function createMenu(req, res){
         const menu = await menuModel.create({
             name,
             type,
-            image: toString(uploadRes.version)+"/"+uploadRes.public_id+"."+uploadRes.format,
+            image: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
             price,
             currency,
             ready,
