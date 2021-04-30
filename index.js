@@ -13,7 +13,7 @@ require("./src/Database/connection/connection");
 //association
 require("./src/Database/associations/association");
 
-const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', "http://localhost:8000"]
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -30,9 +30,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 app.use("/public", express.static('public'));
+app.use(cors(corsOptions));
 
 //Routes
-app.use("/Api/v1", cors(corsOptions), Routes);
+app.use("/Api/v1", Routes);
 
 
 const PORT = process.env.PORT || 8000

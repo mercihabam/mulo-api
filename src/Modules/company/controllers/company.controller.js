@@ -9,22 +9,17 @@ async function createCompany(req, res){
     const { name, adress, type, rccm, numImpot, password, idNat, tel1, tel2, tel3, email, file } = req.body;
     const userId = req.user.id;
     const hashed = hashPassword(password);
-    const uploadRes = await cloudinary.uploader.upload(file);
-    if(uploadRes){  
-        console.log(uploadRes);
-        const company = await CompanyModel.create({
-            name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
-            password: hashed
-        });
-        if(company){
-            const companyUser = await CompanyUser.create({ userId: userId, companyId: company.id, role: "ADMIN" });
-            if(companyUser){
-                sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company);
-                const token = createToken(company.id);
-                createCompanyCookie(res, token);
-            }
-        }else{
-            sendResult(res, 403, null, "enregistrement impossible", company)
+    const uploadRes = await cloudinary.uploader.upload(file); 
+    const company = await CompanyModel.create({
+        name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
+        password: hashed
+    });
+    if(company){
+        const companyUser = await CompanyUser.create({ userId: userId, companyId: company.id, role: "ADMIN" });
+        if(companyUser){
+            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company);
+            const token = createToken(company.id);
+            createCompanyCookie(res, token);
         }
     }else{
         sendResult(res, 403, null, "enregistrement impossible", company)
@@ -51,7 +46,7 @@ async function signCompany(req, res){
     }
 };
 
-async function signOut(req, res){
+function signOut(req, res){
     res.clearCookie("companyCookie");
     sendResult(res, 200, null, "vous avez été deconnecté", null)
 };

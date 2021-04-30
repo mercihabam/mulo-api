@@ -21,7 +21,7 @@ function deleteCookie(res){
 };
 
 function deleteCompanyCookie(res){
-    res.clearCookie("authCookie")
+    res.clearCookie("companyCookie")
 };
 
 function hashPassword(password){
