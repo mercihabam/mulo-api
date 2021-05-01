@@ -17,9 +17,9 @@ async function createCompany(req, res){
     if(company){
         const companyUser = await CompanyUser.create({ userId: userId, companyId: company.id, role: "ADMIN" });
         if(companyUser){
-            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company);
             const token = createToken(company.id);
             createCompanyCookie(res, token);
+            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company);
         }
     }else{
         sendResult(res, 403, null, "enregistrement impossible", company)
