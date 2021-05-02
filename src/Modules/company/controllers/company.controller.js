@@ -4,18 +4,19 @@ const { createCompanyCookie, createToken, comparePassword, hashPassword } = requ
 const cloudinary = require("../../../Utils/cloudinary");
 const { sendResult } = require("../../../Utils/helper");
 const { checkIsCompanyUser } = require("../Validation/company.validation");
+const uuid = require("uuid");
 
 async function createCompany(req, res){
     const { name, adress, type, rccm, numImpot, password, idNat, tel1, tel2, tel3, email, file } = req.body;
     const userId = req.user.id;
     const hashed = hashPassword(password);
     const uploadRes = await cloudinary.uploader.upload(file); 
-    const company = await CompanyModel.create({
+    const company = await CompanyModel.create({ id: uuid.v4(),
         name, adress, type, rccm, idNat, numImpot, tel1, tel2, tel3, email, icon: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
         password: hashed
     });
     if(company){
-        const companyUser = await CompanyUser.create({ userId: userId, companyId: company.id, role: "ADMIN" });
+        const companyUser = await CompanyUser.create({id: uuid.v4(), userId: userId, companyId: company.id, role: "ADMIN" });
         if(companyUser){
             const token = createToken(company.id);
             createCompanyCookie(res, token);

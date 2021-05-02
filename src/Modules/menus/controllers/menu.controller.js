@@ -1,12 +1,14 @@
 const menuModel = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const cloudinary = require("../../../Utils/cloudinary");
+const uuid = require("uuid");
 
 async function createMenu(req, res){
     const { name, type, price, currency, ready, companyId, ingredients, file} = req.body;
     const uploadRes = await cloudinary.uploader.upload(file);
     if(uploadRes){
         const menu = await menuModel.create({
+            id: uuid.v4(),
             name,
             type,
             image: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,

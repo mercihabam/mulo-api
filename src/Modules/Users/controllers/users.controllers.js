@@ -2,12 +2,14 @@ const cartItems = require("../../../Database/models/cartItems");
 const User = require("../../../Database/models/users");
 const { hashPassword, createCookie, createToken, comparePassword, deleteCookie } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
+const uuid = require("uuid");
 
 async function signup(req, res){
     const { firstName, lastName, email, password, avatar } = req.body;
     const hashed = hashPassword(password);;
 
     const user = await User.create({
+        id: uuid.v4(),
         firstName: firstName,
         lastName: lastName,
         email: email,
