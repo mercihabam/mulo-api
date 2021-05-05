@@ -1,4 +1,5 @@
 const cartItem = require("../../../Database/models/cartItems");
+const Cart = require("../../../Database/models/cart");
 const { sendResult } = require("../../../Utils/helper");
 
 async function checkMenuExist(req, res, next){
@@ -22,8 +23,27 @@ async function validQuantity(req, res, next){
     }
 };
 
+async function checkCartExist(req, res, next){
+    if(req.body.companyId){
+        const cart = await Cart.findOne({ where: { userId: req.user.id, companyId: req.body.companyId, ordered: false } });
+        if(cart){
+            req.cartId = cart.id;
+            next();
+        }else{
+            const created = await Cart.create({
+                userId: req.user.id,
+                companyId: req.body.companyId
+            });
+            req.cartId = created.id;
+            next()
+        }
+    }else{
+        sendResult(res, 403, "the company field must be provided", null, null)
+    }
+};
 
 module.exports = {
     checkMenuExist,
     validQuantity,
+    checkCartExist
 };
