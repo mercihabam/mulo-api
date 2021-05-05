@@ -1,8 +1,10 @@
 const cartItems = require("../../../Database/models/cartItems");
+const Cart = require("../../../Database/models/cart");
 const User = require("../../../Database/models/users");
 const { hashPassword, createCookie, createToken, comparePassword, deleteCookie } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
+const { Op } = require("sequelize");
 
 async function signup(req, res){
     const { firstName, lastName, email, password, avatar } = req.body;
@@ -49,13 +51,19 @@ async function logout(req, res){
 };
 
 async function currentUser(req, res){
-    const user = await User.findOne({ where: { id: req.user.id }, include: [ { model: cartItems, where: { ordered: false }, as: "Items" } ]});
-    if(user){
-        sendResult(res, 200, null, null, user)
+    const user1 = await User.findOne({ where: { id: req.user.id }, include: [ { model: Cart, where: {
+        [ Op.or ] : [
+            { ordered: null },
+            { ordered: false }
+        ]
+    }, as: "Cart", include: "Items" } ]});
+    if(user1){
+        sendResult(res, 200, null, null, user1)
     }else{
         const userm = await User.findOne({ where: { id: req.user.id }});
-        const user = { id: userm.id, firstName: userm.firstName, email: userm.email, lastName: userm.lastName, Items: [] }
+        const user = { id: userm.id, firstName: userm.firstName, email: userm.email, lastName: userm.lastName, Cart: { Items: [ ] } }
         sendResult(res, 200, null, null, user);
+        console.log(user1);
     }
 };
 

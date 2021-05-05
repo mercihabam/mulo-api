@@ -32,3 +32,11 @@ Orders.belongsTo(User, { as: "User", foreignKey: "userId" });
 //cart with companys
 Companys.hasMany(Cart, { as: "Carts", foreignKey: "companyId" });
 Cart.belongsTo(Companys, { as: "Resto", foreignKey: "companyId" });
+
+//user with Cart
+User.hasOne(Cart, { as: "Cart", foreignKey: "userId" });
+Cart.belongsTo(User, { as: "User", foreignKey: "userId" });
+
+//Cart with cartItems
+Cart.hasMany(cartitem, { as: "Items", foreignKey: "cartId" });
+cartitem.belongsTo(Cart, { as: "Cart", foreignKey: "cartId"});
