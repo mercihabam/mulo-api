@@ -3,6 +3,7 @@ const Cart = require("../../../Database/models/cart");
 const Menu = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
+const { Op } = require("sequelize");
 
 async function addTocart(req, res){
     const { quantity } = req.body;
@@ -42,8 +43,23 @@ async function getAllItemsByUser(req, res){
 };
 
 async function getCartByUser(req, res){
-    const cart = await Cart.findOne({ where: { userId: req.user.id, ordered: false } });
+    const cart = await Cart.findOne({ where: { userId: req.user.id,
+    [ Op.or ]: [
+        { ordered: false },
+        { ordered: null }
+    ]
+    }, include: "Resto" });
     sendResult(res, 200, null, null, cart)
+};
+
+async function deleteCart(req, res){
+    const cart = await Cart.findOne({ where: { id: req.params.cartId } });
+    if(cart){
+        const updated = await cart.update({ deletedAt: new Date() });
+        if(updated){
+            sendResult(res, 200, null, "panier supprimer", updated)
+        }
+    }
 };
 
 module.exports = {
@@ -51,5 +67,6 @@ module.exports = {
     editItem,
     deleteItem,
     getAllItemsByUser,
-    getCartByUser
+    getCartByUser,
+    deleteCart
 }
