@@ -1,4 +1,5 @@
 const cartItem = require("../../../Database/models/cartItems");
+const Cart = require("../../../Database/models/cart");
 const Menu = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
@@ -10,6 +11,7 @@ async function addTocart(req, res){
         menuId: req.params.menuId,
         quantity,
         userId: req.user.id,
+        cartId: req.cartId
     });
     if(item){
         sendResult(res, 201, null, "ajout au panier effectué", item)
@@ -25,13 +27,6 @@ async function editItem(req, res){
     }else{ sendResult(res, 404, "item not found", null, null) }
 };
 
-async function getItemByUserAndCompany(req, res){
-    // const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
-    //     limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
-    const items = await Cart.findOne({ where: { userId: req.user.id, ordered: false, companyId: req.params.companyId }, include: [ { model: cartItem, where: {ordered: false}, as: "Items", include: "Menu" } ] });
-    sendResult(res, 200, null, null, items);
-};
-
 async function deleteItem(req, res){
     const item = await cartItem.findOne({ where: { id: req.params.id } });
     if(item){
@@ -41,15 +36,20 @@ async function deleteItem(req, res){
 };
 
 async function getAllItemsByUser(req, res){
-    const items = await cartItem.findAndCountAll({ where: { userId: req.user.id, ordered: false }, 
+    const items = await cartItem.findAndCountAll({ where: { cartId: req.params.cartId }, 
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0, include: "Menu" });
         sendResult(res, 200, null, null, items);
-}
+};
+
+async function getCartByUser(req, res){
+    const cart = await Cart.findOne({ where: { userId: req.user.id, ordered: false } });
+    sendResult(res, 200, null, null, cart)
+};
 
 module.exports = {
     addTocart,
     editItem,
-    getItemByUserAndCompany,
     deleteItem,
-    getAllItemsByUser
+    getAllItemsByUser,
+    getCartByUser
 }

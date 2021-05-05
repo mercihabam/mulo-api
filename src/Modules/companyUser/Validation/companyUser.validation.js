@@ -4,8 +4,8 @@ const { sendResult } = require("../../../Utils/helper");
 
 async function checkIsCompanyAdmin(req, res, next){
     const companyUser = await CompanyUser.findOne({ where: { userId: req.user.id, companyId: req.company.id } });
-    if(companyUser){
-        if(companyUser.role === "ADMIN"){ next() }else{
+    if(companyUser || req.user.isAdmin){
+        if(companyUser.role === "ADMIN" || req.user.isAdmin){ next() }else{
             sendResult(res, 401, "seul l'administrateur de cette entreprise peut executer cette action", null, null)
         }
     }else{
