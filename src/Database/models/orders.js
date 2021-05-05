@@ -12,6 +12,10 @@ module.exports = sequelize.define("Orders", {
         type: Sequelize.UUID,
         allowNull: false
     },
+    cartId:{
+        type: Sequelize.UUID,
+        allowNull: false
+    },
     delivered:{
         type: Sequelize.BOOLEAN,
         allowNull: true,
