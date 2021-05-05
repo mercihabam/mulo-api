@@ -4,25 +4,21 @@ const cloudinary = require("../../../Utils/cloudinary");
 const uuid = require("uuid");
 
 async function createMenu(req, res){
-    const { name, type, price, currency, ready, companyId, ingredients, file} = req.body;
+    const { name, type, price, currency, ready, ingredients, file} = req.body;
     const uploadRes = await cloudinary.uploader.upload(file);
-    if(uploadRes){
-        const menu = await menuModel.create({
-            id: uuid.v4(),
-            name,
-            type,
-            image: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
-            price,
-            currency,
-            ready,
-            companyId,
-            ingredients
-        });
-        if(menu){
-            sendResult(res, 201, null, "Menu ajouté", menu)
-        }else{
-            sendResult(res, 500, null, "Impossible d'ajouter le menu", menu)
-        }
+    const menu = await menuModel.create({
+        id: uuid.v4(),
+        name,
+        type,
+        image: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
+        price,
+        currency,
+        ready,
+        companyId: req.company.id,
+        ingredients
+    });
+    if(menu){
+        sendResult(res, 201, null, "Menu ajouté", menu)
     }else{
         sendResult(res, 500, null, "Impossible d'ajouter le menu", menu)
     }

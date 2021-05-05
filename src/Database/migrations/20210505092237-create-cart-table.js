@@ -3,7 +3,7 @@ const uuid = require("uuid");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("Cart", {
+    queryInterface.createTable("Carts", {
       id:{
         type: Sequelize.UUID,
         primaryKey: true,

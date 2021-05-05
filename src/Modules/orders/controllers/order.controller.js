@@ -8,32 +8,16 @@ const uuid = require("uuid");
 const { sendOrderToAdmin } = require("../../Mail/mail.service");
 
 async function createOrder(req, res){
-    const { cartArray, adress, adress2, tel } = req.body;
+    const { adress, adress2, tel } = req.body;
     const codeDelivery = Math.round(Math.random() * (90000000-10000000) + 10000000);
+    console.log(req.cart);
 
-    const order = await Orders.create({ id: uuid.v4(), userId: req.user.id, adress: adress, adress2: adress2, phoneNumber: tel, codeDelivery: codeDelivery });
-    cartArray.forEach(async(item) => {
-        console.log(item);
-        const cartItem = await CartItems.findOne({ where: { id: item }, include: "Menu" });
-        if(cartItem){
-            const orderItem = await OrderItems.create({
-                id: uuid.v4(),
-                userId: req.user.id,
-                itemId: item,
-                companyId: cartItem.Menu.companyId,
-                orderId: order.id
-            });
-            if(orderItem){
-                await cartItem.update({
-                    ordered: true
-                });
-                sendResult(res, 201, null, "opération effectuée", orderItem);
-            }
-        }
-    });
+    const order = await Orders.create({ id: uuid.v4(), userId: req.user.id, adress: adress, adress2: adress2, phoneNumber: tel, codeDelivery: codeDelivery,
+    companyId: req.cart.companyId, cartId: req.cart.id });
     if(order){
-        sendOrderToAdmin(order.codeDelivery, cartArray.length);
-        console.log(order.codeDelivery);
+        req.cart.update({ ordered: true });
+        sendResult(res, 201, null, "opération effectuée", order);
+        sendOrderToAdmin(order.codeDelivery);
     }
 };
 
@@ -79,11 +63,16 @@ async function getRecentOrders(req, res){
     sendResult(res, 200, null, null, orders);
 };
 
-async function getOrderItemsByCompany(req, res){
-    const orders = await OrderItems.findAndCountAll({ where: { companyId: req.params.companyId }, 
-        include: [{ model: CartItems, as: "Item", 
-        include: "Menu" }]});
-        sendResult(res, 200, null, null, orders);
+
+
+async function getOrdersByCompany(req, res){
+    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId }});
+    sendResult(res, 200, null, null, orders);
+};
+
+async function getDeliveredOrdersByCompany(req, res){
+    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, delivered: true }});
+    sendResult(res, 200, null, null, orders);
 };
 
 async function getOrdersByUser(req, res){
@@ -121,10 +110,11 @@ module.exports = {
     getOrder,
     getDeliveredOrders,
     getUnDeliveredOrders,
-    getOrderItemsByCompany,
+    getOrdersByCompany,
     getOrderItemsByOrder,
     markAsDelivered,
     deleteOrder,
     getOrdersByUser,
     getRecentOrders,
+    getDeliveredOrdersByCompany
 }

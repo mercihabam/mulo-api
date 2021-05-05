@@ -21,6 +21,10 @@ module.exports = sequelize.define("Orders", {
         allowNull: true,
         defaultValue: false
     },
+    companyId:{
+        type: Sequelize.UUID,
+        allowNull: false
+    },
     codeDelivery: {
         type: Sequelize.INTEGER(),
         allowNull: false,

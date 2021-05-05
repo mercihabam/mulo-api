@@ -1,13 +1,13 @@
 const { checkToken } = require("../../../Utils/authentication");
-const { addTocart, editItem, deleteItem, getItemByUserAndCompany, getAllItemsByUser } = require("../controllers/cart.controller");
-const { validQuantity, checkMenuExist } = require("../validation/cart.validation");
+const { addTocart, editItem, deleteItem, getAllItemsByUser, getCartByUser } = require("../controllers/cart.controller");
+const { validQuantity, checkMenuExist, checkCartExist, checkNoCart } = require("../validation/cart.validation");
 
 const cartRouter = require("express").Router();
 
-cartRouter.post("/add-to-cart/:menuId", checkToken, validQuantity, checkMenuExist, addTocart);
+cartRouter.post("/add-to-cart/:menuId", checkToken, validQuantity, checkNoCart, checkCartExist, checkMenuExist, addTocart);
 cartRouter.post("/edit-item/:id", checkToken, validQuantity, editItem);
-cartRouter.get("/get-items/:companyId", checkToken, getItemByUserAndCompany);
-cartRouter.get("/get-all-items", checkToken, getAllItemsByUser);
+cartRouter.get("/get-cart-items/:cartId", checkToken, getAllItemsByUser);
+cartRouter.get("/get-cart", checkToken, getCartByUser);
 cartRouter.get("/delete-item/:id", checkToken, deleteItem);
 
 module.exports = cartRouter;
