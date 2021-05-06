@@ -55,6 +55,10 @@ async function currentUser(req, res){
         [ Op.or ] : [
             { ordered: null },
             { ordered: false }
+        ],
+        [ Op.or ] : [
+            { deletedAt: null },
+            { deletedAt: false }
         ]
     }, as: "Cart", include: "Items" } ]});
     if(user1){
