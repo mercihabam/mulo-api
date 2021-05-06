@@ -56,10 +56,7 @@ async function currentUser(req, res){
             { ordered: null },
             { ordered: false }
         ],
-        [ Op.or ] : [
-            { deletedAt: null },
-            { deletedAt: false }
-        ]
+        deletedAt: null
     }, as: "Cart", include: "Items" } ]});
     if(user1){
         sendResult(res, 200, null, null, user1)

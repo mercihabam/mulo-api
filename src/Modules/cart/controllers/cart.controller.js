@@ -48,10 +48,7 @@ async function getCartByUser(req, res){
         { ordered: false },
         { ordered: null }
     ],
-    [ Op.or ] : [
-        { deletedAt: null },
-        { deletedAt: false }
-    ]
+    deletedAt: null
     }, include: "Resto" });
     sendResult(res, 200, null, null, cart)
 };
