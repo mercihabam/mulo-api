@@ -57,7 +57,7 @@ async function deleteCart(req, res){
     const cart = await Cart.findOne({ where: { id: req.params.cartId } });
     if(cart){
         const items = await cartItem.findAll({ where: { cartId: cart.id } });
-        items.forEach(item => {
+        items.forEach(async(item) => {
             await item.destroy()
         });
         const updated = await cart.destroy;
