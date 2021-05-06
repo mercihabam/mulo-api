@@ -124,5 +124,6 @@ module.exports = {
     deleteOrder,
     getOrdersByUser,
     getRecentOrders,
-    getDeliveredOrdersByCompany
+    getDeliveredOrdersByCompany,
+    getUnDeliveredOrdersByComapny
 }
