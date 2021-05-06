@@ -66,12 +66,20 @@ async function getRecentOrders(req, res){
 
 
 async function getOrdersByCompany(req, res){
-    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId }});
+    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, deletedAt: null }, 
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0});
     sendResult(res, 200, null, null, orders);
 };
 
 async function getDeliveredOrdersByCompany(req, res){
-    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, delivered: true }});
+    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, delivered: true, deletedAt: null },
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0});
+    sendResult(res, 200, null, null, orders);
+};
+
+async function getUnDeliveredOrdersByComapny(req, res){
+    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false, companyId: req.params.companyId },
+        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0  });
     sendResult(res, 200, null, null, orders);
 };
 
@@ -116,5 +124,6 @@ module.exports = {
     deleteOrder,
     getOrdersByUser,
     getRecentOrders,
-    getDeliveredOrdersByCompany
+    getDeliveredOrdersByCompany,
+    getUnDeliveredOrdersByComapny
 }
