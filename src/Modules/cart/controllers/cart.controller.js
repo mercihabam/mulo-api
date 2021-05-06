@@ -60,7 +60,7 @@ async function deleteCart(req, res){
         items.forEach(async(item) => {
             await item.destroy()
         });
-        const updated = await cart.destroy;
+        const updated = await cart.destroy();
         if(updated){
             sendResult(res, 200, null, "panier supprimer", null)
         }
