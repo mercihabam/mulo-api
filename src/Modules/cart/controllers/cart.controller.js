@@ -56,9 +56,13 @@ async function getCartByUser(req, res){
 async function deleteCart(req, res){
     const cart = await Cart.findOne({ where: { id: req.params.cartId } });
     if(cart){
-        const updated = await cart.update({ deletedAt: new Date() });
+        const items = await cartItem.findAll({ where: { cartId: cart.id } });
+        items.forEach(item => {
+            await item.destroy()
+        });
+        const updated = await cart.destroy;
         if(updated){
-            sendResult(res, 200, null, "panier supprimer", updated)
+            sendResult(res, 200, null, "panier supprimer", null)
         }
     }
 };
