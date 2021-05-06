@@ -26,7 +26,7 @@ async function validQuantity(req, res, next){
 
 async function checkCartExist(req, res, next){
     if(req.body.companyId){
-        const cart = await Cart.findOne({ where: { userId: req.user.id, companyId: req.body.companyId, ordered: false } });
+        const cart = await Cart.findOne({ where: { userId: req.user.id, companyId: req.body.companyId, ordered: false, deletedAt: null } });
         if(cart){
             req.cartId = cart.id;
             next();
