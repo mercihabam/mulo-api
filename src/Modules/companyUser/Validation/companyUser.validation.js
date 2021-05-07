@@ -18,7 +18,7 @@ async function checkIsCompanyUser(req, res, next){
     if(companyUser){
         next()
     }else{
-        sendResult(res, 401, "unhautorised", null, null)
+        sendResult(res, 402, "unhautorised", null, null)
     }
 };
 
