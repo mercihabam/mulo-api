@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const userModel = require("../Database/models/users");
 const { sendResult } = require("./helper");
 const companys = require("../Database/models/companys");
+const CompanyUser = require("../Database/models/companyUser");
 
 function createToken(userId) {
     return jwt.sign({ userId: userId }, process.env.PRIVATE_KEY);
@@ -63,8 +64,13 @@ function checkCompanyToken(req, res, next){
             const userId = data.userId;
             const company = await companys.findOne({ where: { id: userId } });
             if(company){
-                req.company = company;
-                next();
+                const companyUser = CompanyUser.findOne({ where: { userId: req.user.id, companyId: company.id } });
+                if(companyUser){
+                    req.company = company;
+                    next();
+                }else{
+                    sendResult(res, 402, "not authorised", null, null);
+                }
             }else{
                 sendResult(res, 403, "jeton d'accès incorrect", null, null);
             }
