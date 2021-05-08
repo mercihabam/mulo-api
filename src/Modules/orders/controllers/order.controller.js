@@ -72,7 +72,7 @@ async function getOrdersByCompany(req, res){
 };
 
 async function getDeliveredOrdersByCompany(req, res){
-    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, delivered: true, deletedAt: null },
+    const orders = await Orders.findAndCountAll({ where: { companyId: req.params.id, delivered: true, deletedAt: null },
         limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0, include: "User"});
     sendResult(res, 200, null, null, orders);
 };
