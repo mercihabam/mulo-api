@@ -78,7 +78,7 @@ async function getDeliveredOrdersByCompany(req, res){
 };
 
 async function getUnDeliveredOrdersByComapny(req, res){
-    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false, companyId: req.params.companyId },
+    const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false, companyId: req.params.id },
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0, include: "User"  });
     sendResult(res, 200, null, null, orders);
 };
