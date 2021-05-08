@@ -17,7 +17,7 @@ async function createOrder(req, res){
     if(order){
         req.cart.update({ ordered: true });
         sendResult(res, 201, null, "opération effectuée", order);
-        sendOrderToAdmin(order.codeDelivery);
+        sendOrderToAdmin(order.codeDelivery, req.user, "mercihabam@gmail.com");
     }
 };
 

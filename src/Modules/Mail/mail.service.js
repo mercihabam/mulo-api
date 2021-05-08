@@ -2,10 +2,10 @@
 const nodemailer = require("nodemailer");
 
 // async..await is not allowed in global scope, must use a wrapper
-async function sendOrderToAdmin(codeDelivery, number) {
+async function sendOrderToAdmin(codeDelivery, user, to) {
 
   let html = `
-        <h1>Vous avez une nouvelle commande de ${number} objet${number > 1 ? "s": ""}</h1>
+        <h1>Vous avez une nouvelle commande de ${user.firstName} ${user.lastName}</h1>
         <p>
             Le code de livraison de la commande est <h2>${codeDelivery}<h2>
         </p>
@@ -26,7 +26,7 @@ async function sendOrderToAdmin(codeDelivery, number) {
   if(codeDelivery){
     let info = await transporter.sendMail({
         from: `"Mulo Food 👻" ${process.env.EMAIL_ACCOUNT}`, // sender address
-        to: "mercihabam@gmail.com", // list of receivers
+        to: to, // list of receivers
         subject: "Nouvelle commande ✔", // Subject line
         text: "Hello world?", // plain text body
         html: html, // html body
