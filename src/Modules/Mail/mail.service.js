@@ -45,7 +45,7 @@ async function sendPassToUser(data, to){
         </p>
     `
 
-  if(data){
+  if(to){
     let info = await transporter.sendMail({
         from: `"Mulo Food 👻" ${process.env.EMAIL_ACCOUNT}`, // sender address
         to: to, // list of receivers
