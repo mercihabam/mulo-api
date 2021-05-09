@@ -1,6 +1,17 @@
 "use strict";
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.MAIL_PORT,
+  secure: true, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_ACCOUNT, // generated ethereal user
+    pass: process.env.EMAIL_PASS, // generated ethereal password
+  },
+});
+
+
 // async..await is not allowed in global scope, must use a wrapper
 async function sendOrderToAdmin(codeDelivery, user, to) {
 
@@ -12,16 +23,6 @@ async function sendOrderToAdmin(codeDelivery, user, to) {
     `
 
   // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.MAIL_PORT,
-    secure: true, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_ACCOUNT, // generated ethereal user
-      pass: process.env.EMAIL_PASS, // generated ethereal password
-    },
-  });
-
   // send mail with defined transport object
   if(codeDelivery){
     let info = await transporter.sendMail({
@@ -32,10 +33,34 @@ async function sendOrderToAdmin(codeDelivery, user, to) {
         html: html, // html body
     });
   }
-}
+};
+
+async function sendPassToUser(data, to){
+
+  let html = `
+        Bonjour <h1>${data.firstName} ${data.lastName} </h1>
+        Vous avez inscrit dans l'entreprise ${data.company} comme ${data.role}
+        <p>
+            Votre mot de passe est <h2>${data.password}<h2>
+        </p>
+    `
+
+  if(data){
+    let info = await transporter.sendMail({
+        from: `"Mulo Food 👻" ${process.env.EMAIL_ACCOUNT}`, // sender address
+        to: to, // list of receivers
+        subject: "Inscription ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: html, // html body
+    });
+  }
+
+};
 
 sendOrderToAdmin().catch(console.error);
+sendPassToUser().catch(console.error);
 
 module.exports = {
     sendOrderToAdmin,
+    sendPassToUser
 }
