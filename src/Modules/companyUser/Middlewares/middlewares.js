@@ -5,7 +5,7 @@ const { sendResult } = require("../../../Utils/helper");
 async function createUser(req, res, next){
     const { firstName,lastName, email } = req.body;
     const password = Math.round(Math.random() * (900000-100000) + 100000);
-    const hashed = hashPassword(password);;
+    const hashed = hashPassword(password.toString());
 
     const user = await User.create({
         firstName: firstName,
