@@ -4,7 +4,7 @@ const { sendResult } = require("../../../Utils/helper");
 const { sendPassToUser } = require("../../Mail/mail.service");
 
 async function createUser(req, res, next){
-    const { firstName,lastName, email } = req.body;
+    const { firstName,lastName, email, role } = req.body;
     const password = Math.round(Math.random() * (900000-100000) + 100000);
     const hashed = hashPassword(password.toString());
 
@@ -16,7 +16,7 @@ async function createUser(req, res, next){
     });
     if(user){
         req.userId = user.id;
-        sendPassToUser({ firstName: firstName, lastName: lastName, company: req.company.name, password: password }, email)
+        sendPassToUser({ firstName: firstName, lastName: lastName, company: req.company.name, password: password, role: role }, email)
         next();
     }else{
         sendResult(res, 403, "impossible de créer l'utilisateur", null, null);
