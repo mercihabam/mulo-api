@@ -14,7 +14,7 @@ async function checkIsCompanyAdmin(req, res, next){
 };
 
 async function checkIsCompanyUser(req, res, next){
-    const companyUser = await CompanyUser.findOne({ where: { userId: req.user.id, companyId: req.company.id } });
+    const companyUser = await CompanyUser.findOne({ where: { userId: req.user.id, companyId: req.company.id, deletedAt:null } });
     if(companyUser){
         next()
     }else{
@@ -31,8 +31,19 @@ async function checkRequiredFields(req, res, next){
     }
 };
 
+async function checkIsValidCompany(req, res, next){
+    const { companyId } = req.body;
+    const company = await CompanyModel.findOne({ where: { id: companyId, deletedAt: null } });
+    if(company){
+        next();
+    }else{
+        sendResult(res, 404, "entreprise non valide", null, null)
+    }
+};
+
 module.exports = {
     checkIsCompanyAdmin,
     checkRequiredFields,
-    checkIsCompanyUser
+    checkIsCompanyUser,
+    checkIsValidCompany
 }

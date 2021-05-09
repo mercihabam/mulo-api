@@ -10,7 +10,6 @@ const { sendOrderToAdmin } = require("../../Mail/mail.service");
 async function createOrder(req, res){
     const { adress, adress2, tel } = req.body;
     const codeDelivery = Math.round(Math.random() * (90000000-10000000) + 10000000);
-    console.log(req.cart);
 
     const order = await Orders.create({ id: uuid.v4(), userId: req.user.id, adress: adress, adress2: adress2, phoneNumber: tel, codeDelivery: codeDelivery,
     companyId: req.cart.companyId, cartId: req.cart.id });
