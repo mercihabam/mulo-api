@@ -28,8 +28,30 @@ async function getCompanyUsersByCompany(req, res){
     sendResult(res, 200, null, null, users)
 };
 
+async function deleteCompanyUser(req, res){
+    const comapnyUser = await CompanyUser.findOne({ where: { id: req.params.id } });
+    if(comapnyUser){
+        await comapnyUser.update({ deletedAt: new Date() });
+        sendResult(res, 200, null, "employée supprimé", null)
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+};
+
+async function updateCompanyUser(req, res){
+    const comapnyUser = await CompanyUser.findOne({ where: { id: req.params.id } });
+    if(comapnyUser){
+        await comapnyUser.update({ role: req.body.role || comapnyUser.role });
+        sendResult(res, 200, null, "modification enregistreé", null)
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+};
+
 module.exports = {
     createCompanyUser,
     getCurrentCompanyUser,
-    getCompanyUsersByCompany
+    getCompanyUsersByCompany,
+    deleteCompanyUser,
+    updateCompanyUser
 }
