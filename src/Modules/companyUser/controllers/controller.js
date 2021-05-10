@@ -26,7 +26,7 @@ async function getCurrentCompanyUser(req, res){
 
 async function getCompanyUsersByCompany(req, res){
     const users = await CompanyUser.findAndCountAll({ where: { companyId: req.params.companyId, deletedAt: null },
-    offset: parseInt(req.query.offset) || 0, limit: parseInt(req.query.limit) || 10 });
+    offset: parseInt(req.query.offset) || 0, limit: parseInt(req.query.limit) || 10, include: "User" });
     sendResult(res, 200, null, null, users)
 };
 
