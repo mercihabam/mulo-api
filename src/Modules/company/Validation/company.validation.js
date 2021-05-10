@@ -22,6 +22,48 @@ async function checkCompanyName(req, res, next){
     }
 };
 
+async function checkCompanyNameToUpdate(req, res, next){
+    const { name } = req.body;
+
+    if(name){
+        const company = await CompanyModel.findOne({ where: { name: name } });
+        if(company && company.id !== req.params.id){
+            sendResult(res, 403, "une autre entreprise utilise déjà ce nom", null, null)
+        }else{
+            next();
+        }
+    }else{ next() }
+};
+
+async function checkCompanyTelToUpdate(req, res, next){
+    const { tel1 } = req.body;
+
+    if(tel1){
+        const company = await CompanyModel.findOne({ where: { tel1: tel1 } });
+        if(company && company.id !== req.params.id){
+            sendResult(res, 403, "une autre entreprise utilise déjà ce numéro de téléphone", null, null)
+        }else{
+            next();
+        }
+    }else{ next() }
+};
+
+async function checkCompanyEmailToUpdate(req, res, next){
+    const { email } = req.body;
+
+    if(email){
+        const company = await CompanyModel.findOne({ where: { email: email } });
+        if(company && company.id !== req.params.id){
+            sendResult(res, 403, "une autre entreprise utilise déjà cet adresse mail", null, null)
+        }else{
+            next();
+        }
+    }else{
+        next()
+    }
+};
+
+
 async function checkCompanyTel(req, res, next){
     const { tel1 } = req.body;
 
@@ -53,5 +95,8 @@ module.exports = {
     checkCompanyName,
     checkCompanyTel,
     checkCompanyEmail,
-    checkIsCompanyUser
+    checkIsCompanyUser,
+    checkCompanyNameToUpdate,
+    checkCompanyEmailToUpdate,
+    checkCompanyTelToUpdate
 }

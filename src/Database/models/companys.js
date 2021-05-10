@@ -68,5 +68,13 @@ module.exports = sequelize.define("Companys", {
         type: Sequelize.INTEGER(),
         allowNull: true,
         required: false
+    },
+    deliveryPrice: {
+        type: Sequelize.INTEGER(),
+        defaultValue: 0,
+    },
+    deliveryCurrency: {
+        type: Sequelize.STRING(),
+        allowNull: true
     }
 });
