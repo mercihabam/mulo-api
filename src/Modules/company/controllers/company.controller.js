@@ -56,7 +56,7 @@ async function updateCompany(req, res){
     const { name, adress, type, rccm, numImpot, idNat, tel1, tel2, tel3, email, deliveryPrice, deliveryCurrency } = req.body;
     const company = await CompanyModel.findOne({ where: { id: req.params.id } });
     if(company){
-        const updated = await CompanyModel.update({
+        const updated = await company.update({
             name: name || company.name,
             adress: adress || company.adress,
             type: type || company.type,
