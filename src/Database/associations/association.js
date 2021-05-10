@@ -5,6 +5,7 @@ const Cart = require("../models/cart");
 const User = require("../models/users");
 const OrderItems = require("../models/orderItems");
 const Orders = require("../models/orders");
+const CompanyUser = require("../models/companyUser");
 
 //menus with companys
 Companys.hasMany(Menus, { as: "Menus", foreignKey: "companyId" });
@@ -36,6 +37,9 @@ Cart.belongsTo(Companys, { as: "Resto", foreignKey: "companyId" });
 //user with Cart
 User.hasOne(Cart, { as: "Cart", foreignKey: "userId" });
 Cart.belongsTo(User, { as: "User", foreignKey: "userId" });
+
+User.hasOne(CompanyUser, { as: "User", foreignKey: "userId" });
+CompanyUser.belongsTo(User, { as: "User", foreignKey: "userId" });
 
 //Cart with cartItems
 Cart.hasMany(cartitem, { as: "Items", foreignKey: "cartId" });
