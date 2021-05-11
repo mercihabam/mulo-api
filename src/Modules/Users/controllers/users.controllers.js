@@ -5,6 +5,7 @@ const { hashPassword, createCookie, createToken, comparePassword, deleteCookie }
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
 const { Op } = require("sequelize");
+const cloudinary = require("../../../Utils/cloudinary");
 
 async function signup(req, res){
     const { firstName, lastName, email, password, avatar } = req.body;
