@@ -11,6 +11,18 @@ async function checkEmailExist(req, res, next){
     }
 };
 
+async function checkUpdateEmailExist(req, res, next){
+    const { email } = req.body;
+    if(email){
+        const user = await UserModel.findOne({ where: { email: email } });
+        if(user && user.id !== req.params.id){
+            sendResult(res, 500, "utilisateur avec cet adresse mail existe déjà", null, null)
+        }else{
+            next();
+        }
+    }else{ next() }
+};
+
 async function checkRequiredFields(req, res, next){
     const { firstName, lastName, email, password, confirmPassword, avatar } = req.body;
     if(firstName && lastName && email && password && confirmPassword){
@@ -52,5 +64,6 @@ module.exports = {
     checkRequiredFields,
     checkPasswordMatch,
     checkPasswordIsValid,
-    checkLoginFields
+    checkLoginFields,
+    checkUpdateEmailExist
 }

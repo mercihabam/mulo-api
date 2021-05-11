@@ -78,11 +78,42 @@ async function currentAdmin(req, res){
     sendResult(res, 200, null, null, user)
 };
 
+async function updateUser(req, res){
+    const { firstName, lastName, email, avatar } = req.body;
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if(user){
+        if(avatar){
+            const uploadRes = await cloudinary.uploader.upload(avatar);
+            const updated = await user.update({
+                firstName: firstName || user.firstName,
+                lastName: lastName || user.lastName,
+                email: email || user.email,
+                avatar: uploadRes.version.toString()+"/"+uploadRes.public_id+"."+uploadRes.format,
+            });
+            if(updated){
+                sendResult(res, 200, null, "modification enregistrée", updated)
+            }
+        }else{
+            const updated = await user.update({
+                firstName: firstName || user.firstName,
+                lastName: lastName || user.lastName,
+                email: email || user.email,
+            });
+            if(updated){
+                sendResult(res, 200, null, "modification enregistrée", updated)
+            }
+        }
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+};
+
 module.exports = {
     signup,
     login,
     currentUser,
     logout,
     getAllUsers,
-    currentAdmin
+    currentAdmin,
+    updateUser
 }
