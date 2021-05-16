@@ -39,9 +39,9 @@ async function sendPassToUser(data, to){
 
   let html = `
         Bonjour <h1>${data.firstName} ${data.lastName} </h1>
-        Vous avez inscrit dans l'entreprise ${data.company} comme ${data.role}
+        Vous avez été inscrit dans l'entreprise ${data.company} comme ${data.role}
         <p>
-            Votre mot de passe est <h2>${data.password}<h2>
+            Votre mot de passe de connexion est <h2>${data.password}<h2>
         </p>
     `
 
@@ -57,10 +57,26 @@ async function sendPassToUser(data, to){
 
 };
 
-sendOrderToAdmin().catch(console.error);
-sendPassToUser().catch(console.error);
+async function sendPasswordResetEmail (email, token) {
+
+  let html = `
+        Salut
+        nous avons réçu une requete de changement de mot de passe de votre compte Mulo <br/>
+        Vous pouvez réinitialiser votre mot de passe en cliquant sur ce lien<br/>
+        <a href="https://mulo-food.herokuapp.com/user/reset-pwd/${token}" >https://mulo-food.herokuapp.com/user/reset-pwd/${token}</a>
+    `
+
+  await transporter.sendMail({
+    from: `"Mulo Food 👻" ${process.env.EMAIL_ACCOUNT}`, // sender address
+    to: email, // list of receivers
+    subject: "Reset password request", // Subject line
+    text: "Hello world?", // plain text body
+    html: html, // html body
+  });
+}
 
 module.exports = {
     sendOrderToAdmin,
-    sendPassToUser
+    sendPassToUser,
+    sendPasswordResetEmail
 }

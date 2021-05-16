@@ -8,8 +8,20 @@ const companys = require("../Database/models/companys");
 const CompanyUser = require("../Database/models/companyUser");
 
 function createToken(userId) {
-    return jwt.sign({ userId: userId }, process.env.PRIVATE_KEY);
+    return jwt.sign({ userId: userId }, process.env.PRIVATE_KEY, {
+        expiresIn: "1 day"
+    });
 };
+
+function createResetToken(hashedPassword, userId, createdAt){
+    const secret = hashedPassword + "-" + createdAt;
+
+    const token = jwt.sign({ userId: userId }, secret,
+        {
+            expiresIn: 3600
+        });
+    return token
+}
 
 function createCookie(res, token){
     res.cookie("authCookie", token, { maxAge: 86400000, httpOnly: true, secure: true, sameSite: "None" });
@@ -36,9 +48,10 @@ function comparePassword(password, hash){
 };
 
 function checkToken(req, res, next){
-    const authCookie = req.cookies.authCookie;
+    const authToken = req.headers["authtoken"];
+    console.log(authToken);
 
-    jwt.verify(authCookie, process.env.PRIVATE_KEY, async(err, data) =>{
+    jwt.verify(authToken, process.env.PRIVATE_KEY, async(err, data) =>{
         if(err){
             sendResult(res, 401, "vous devez posseder un jeton d'accès")
         }else if(data){
@@ -55,9 +68,9 @@ function checkToken(req, res, next){
 };
 
 function checkCompanyToken(req, res, next){
-    const companyCookie = req.cookies.companyCookie;
+    const companyToken = req.headers["companytoken"];
 
-    jwt.verify(companyCookie, process.env.PRIVATE_KEY, async(err, data) =>{
+    jwt.verify(companyToken, process.env.PRIVATE_KEY, async(err, data) =>{
         if(err){
             sendResult(res, 402, "vous devez posseder un jeton d'accès", null, null)
         }else if(data){
@@ -97,4 +110,5 @@ module.exports = {
     createCompanyCookie,
     deleteCompanyCookie,
     checkCompanyToken,
+    createResetToken
 }

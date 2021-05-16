@@ -1,11 +1,12 @@
 const cartItems = require("../../../Database/models/cartItems");
 const Cart = require("../../../Database/models/cart");
 const User = require("../../../Database/models/users");
-const { hashPassword, createCookie, createToken, comparePassword, deleteCookie } = require("../../../Utils/authentication");
+const { hashPassword, createCookie, createToken, comparePassword, deleteCookie, createResetToken } = require("../../../Utils/authentication");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
 const { Op } = require("sequelize");
 const cloudinary = require("../../../Utils/cloudinary");
+const { sendPasswordResetEmail } = require("../../Mail/mail.service");
 
 async function signup(req, res){
     const { firstName, lastName, email, password, avatar } = req.body;
@@ -21,8 +22,7 @@ async function signup(req, res){
     });
     if(user){
         const token = createToken(user.id);
-        createCookie(res, token);
-        sendResult(res, 201, null, "inscription réussi", user);
+        sendResult(res, 201, null, "inscription réussi", {...user, token});
     }else{
         sendResult(res, 500, "inscription echoue", null, user);
     }
@@ -35,8 +35,7 @@ async function login(req, res){
         const passwordMatch = comparePassword(password, user.password);
         if(passwordMatch){
             const token = createToken(user.id);
-            createCookie(res, token);
-            sendResult(res, 200, null, "vous avez été connecté", user)
+            sendResult(res, 200, null, "vous avez été connecté", {user, token})
         }else
         {
             sendResult(res, 403, "mot de passe incorrect", null, null)
@@ -63,7 +62,7 @@ async function currentUser(req, res){
         sendResult(res, 200, null, null, user1)
     }else{
         const userm = await User.findOne({ where: { id: req.user.id }});
-        const user = { id: userm.id, firstName: userm.firstName, email: userm.email, lastName: userm.lastName, Cart: { Items: [ ] } }
+        const user = { id: userm.id, isAdmin: userm.isAdmin, firstName: userm.firstName, email: userm.email, lastName: userm.lastName, Cart: { Items: [ ] } }
         sendResult(res, 200, null, null, user);
         console.log(user1);
     }
@@ -109,6 +108,17 @@ async function updateUser(req, res){
     }
 };
 
+async function forgotPassword(req, res){
+    const user = await User.findOne({ where: { email: req.params.email } });
+    if(user){
+        const token = createResetToken()
+        await sendPasswordResetEmail(user.email, token);
+        sendResult(res, 200, null, "mail envoyé", user)
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+}
+
 module.exports = {
     signup,
     login,
@@ -116,5 +126,6 @@ module.exports = {
     logout,
     getAllUsers,
     currentAdmin,
-    updateUser
+    updateUser,
+    forgotPassword
 }
