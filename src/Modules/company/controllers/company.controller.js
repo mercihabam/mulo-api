@@ -19,8 +19,7 @@ async function createCompany(req, res){
         const companyUser = await CompanyUser.create({id: uuid.v4(), userId: userId, companyId: company.id, role: "ADMIN" });
         if(companyUser){
             const token = createToken(company.id);
-            createCompanyCookie(res, token);
-            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", company);
+            sendResult(res, 201, null, "enregistrement de l'entreprise effectué avec succès", {company, token});
         }
     }else{
         sendResult(res, 403, null, "enregistrement impossible", company)
@@ -36,8 +35,7 @@ async function signCompany(req, res){
             const companyUser = await checkIsCompanyUser({ userId: req.user.id, companyId: company.id });
             if(companyUser){
                 const token = createToken(company.id);
-                createCompanyCookie(res, token);
-                sendResult(res, 200, null, "vous avez été connecté", company)
+                sendResult(res, 200, null, "vous avez été connecté", {company, token})
             }else{ sendResult(res, 401, "Vous devez etre membre de cette entrepse pour s'y connecter", null, null) }
         }else{
             sendResult(res, 401, "mot de passe incorrect", null, null)

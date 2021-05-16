@@ -23,7 +23,7 @@ async function signup(req, res){
     });
     if(user){
         const token = createToken(user.id);
-        sendResult(res, 201, null, "inscription réussi", {...user, token});
+        sendResult(res, 201, null, "inscription réussi", {user, token});
     }else{
         sendResult(res, 500, "inscription echoue", null, user);
     }
