@@ -70,7 +70,7 @@ module.exports = sequelize.define("Companys", {
         required: false
     },
     deliveryPrice: {
-        type: Sequelize.INTEGER(),
+        type: Sequelize.FLOAT(),
         defaultValue: 0,
     },
     deliveryCurrency: {
