@@ -37,9 +37,5 @@ module.exports = sequelize.define("Users", {
     isAdmin: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
-    },
-    // pwdCode: {
-    //     type: Sequelize.STRING(),
-    //     allowNull: true
-    // }
+    }
 });

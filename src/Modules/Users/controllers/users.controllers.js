@@ -7,6 +7,7 @@ const uuid = require("uuid");
 const { Op } = require("sequelize");
 const cloudinary = require("../../../Utils/cloudinary");
 const { sendPasswordResetEmail } = require("../../Mail/mail.service");
+const jwt = require("jsonwebtoken");
 
 async function signup(req, res){
     const { firstName, lastName, email, password, avatar } = req.body;
@@ -111,13 +112,38 @@ async function updateUser(req, res){
 async function forgotPassword(req, res){
     const user = await User.findOne({ where: { email: req.params.email } });
     if(user){
-        const token = createResetToken()
-        await sendPasswordResetEmail(user.email, token);
+        const token = createResetToken(user.password, user.id, user.createdAt);
+        await sendPasswordResetEmail(user, token);
         sendResult(res, 200, null, "mail envoyé", user)
     }else{
         sendResult(res, 404, "user not found", null, null)
     }
-}
+};
+
+async function resetPassword(req, res){
+    const { password } = req.body;
+    const { id, token } = req.params;
+
+    const user = await User.findOne({ where: { id: id } });
+    if(user){
+        const secret = user.password + "-" + user.createdAt;
+        jwt.verify(token, secret, async(err, data) =>{
+            if(err){
+                sendResult(res, 403, "invalid token", null, null)
+            }else if(data.userId === user.id){
+                const hashedPassword = hashPassword(password);
+                const updated = await user.update({
+                    password: hashedPassword
+                });
+                sendResult(res, 200, null, "le mot de passe a été changé", updated)
+            }else{
+                sendResult(res, 403, "invalid token", null, null)
+            }
+        })
+    }else{
+        sendResult(res, 404, "user not found", null, null)
+    }
+};
 
 module.exports = {
     signup,
@@ -127,5 +153,6 @@ module.exports = {
     getAllUsers,
     currentAdmin,
     updateUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }
