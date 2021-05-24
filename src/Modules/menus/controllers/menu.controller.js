@@ -2,6 +2,7 @@ const menuModel = require("../../../Database/models/menus");
 const { sendResult } = require("../../../Utils/helper");
 const cloudinary = require("../../../Utils/cloudinary");
 const uuid = require("uuid");
+const { Op } = require("sequelize");
 
 async function createMenu(req, res){
     const { name, type, price, currency, ready, ingredients, file} = req.body;
@@ -85,6 +86,22 @@ async function getMenuReadyByCompany(req, res){
     sendResult(res, 200, null, null, menus);
 };
 
+async function searchMenusByName(req, res){
+    const { query } = req.query;
+
+    const menus = await menuModel.findAndCountAll({
+        where: {
+            name : {
+                [ Op.substring ]: query
+            }
+        },
+        limit: parseInt(req.query.limit) || 10,
+        offset: parseInt(req.query.offset) || 0,
+        include: "Resto"
+    });
+    sendResult(res, 200, null, null, menus)
+}
+
 module.exports = {
     createMenu,
     deleteMenu,
@@ -93,5 +110,6 @@ module.exports = {
     getMenusByCompany,
     getMenuById,
     getMenuReady,
-    getMenuReadyByCompany
+    getMenuReadyByCompany,
+    searchMenusByName
 }

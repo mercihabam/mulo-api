@@ -10,7 +10,7 @@ function checkRequiredFields(req, res, next){
 
 async function checkMenuNameExist(req, res, next){
     const { name } = req.body;
-    const menu = await menuModel.findOne({ where: { name: name } });
+    const menu = await menuModel.findOne({ where: { name: name, companyId: req.company.id } });
     if(menu){
         sendResult(res, 403, "un menu existe déjà avec ce nom", null, null);
     }else{ next() };

@@ -1,10 +1,11 @@
 const CompanyModel = require("../../../Database/models/companys");
 const CompanyUser = require("../../../Database/models/companyUser");
-const { createCompanyCookie, createToken, comparePassword, hashPassword } = require("../../../Utils/authentication");
+const { createToken, comparePassword, hashPassword } = require("../../../Utils/authentication");
 const cloudinary = require("../../../Utils/cloudinary");
 const { sendResult } = require("../../../Utils/helper");
 const { checkIsCompanyUser } = require("../Validation/company.validation");
 const uuid = require("uuid");
+const { Op } = require("sequelize");
 
 async function createCompany(req, res){
     const { name, adress, type, rccm, numImpot, password, idNat, tel1, tel2, tel3, email, file } = req.body;
@@ -107,6 +108,21 @@ async function getCurrentCompany(req, res){
     sendResult(res, 200, null, null, company)
 };
 
+async function searchCompanyByName(req, res){
+    const { query } = req.query;
+
+    const restos = await CompanyModel.findAndCountAll({
+        where: {
+            name : {
+                [ Op.substring ]: query
+            }
+        },
+        limit: parseInt(req.query.limit) || 10,
+        offset: parseInt(req.query.offset) || 0
+    });
+    sendResult(res, 200, null, null, restos)
+}
+
 module.exports = {
     createCompany,
     updateCompany,
@@ -116,4 +132,5 @@ module.exports = {
     signCompany,
     signOut,
     getCurrentCompany,
+    searchCompanyByName
 }
