@@ -90,7 +90,8 @@ async function deleteCompany(req, res){
 };
 
 async function getCompanys(req, res){
-    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0 });
+    const companys = await CompanyModel.findAndCountAll({ where: { deletedAt: null }, limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
+        order: [[ "name", "ASC" ]] });
     sendResult(res, 200, null, null, companys);
 };
 
