@@ -30,10 +30,19 @@ async function checkValidCart(req, res, next){
     }else{
         sendResult(res, 403, "veuillez fournir le champ cart", null, null)
     }
-}
+};
+
+function checkValidTel(req, res, next){
+    const { phoneNumber } = req.body;
+
+    if(phoneNumber.length < 13){
+        sendResult(res, 500, "Numéro de téléphone incorrect")
+    }else{ next() }
+};
 
 module.exports = {
     checkRequiredFields,
     checkCode,
-    checkValidCart
+    checkValidCart,
+    checkValidTel
 }

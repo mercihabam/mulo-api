@@ -88,7 +88,23 @@ async function checkCompanyEmail(req, res, next){
 
 function checkIsCompanyUser(data){
     return CompanyUser.findOne({ where: data });
-}
+};
+
+function checkValidTel(req, res, next){
+    const { tel1 } = req.body;
+
+    if(tel1.length < 13){
+        sendResult(res, 500, "Numéro de téléphone incorrect")
+    }else{ next() }
+};
+
+function checkValidUpdateTel(req, res, next){
+    const { tel1 } = req.body;
+
+    if(tel1 && tel1.length < 13){
+        sendResult(res, 500, "Numéro de téléphone incorrect")
+    }else{ next() }
+};
 
 module.exports = {
     checkRequiredFields,
@@ -98,5 +114,7 @@ module.exports = {
     checkIsCompanyUser,
     checkCompanyNameToUpdate,
     checkCompanyEmailToUpdate,
-    checkCompanyTelToUpdate
+    checkCompanyTelToUpdate,
+    checkValidTel,
+    checkValidUpdateTel
 }

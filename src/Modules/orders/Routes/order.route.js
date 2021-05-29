@@ -1,11 +1,11 @@
 const { checkToken, checkIsAdmin } = require("../../../Utils/authentication");
 const { createOrder, getOrders, getOrder, markAsDelivered, getDeliveredOrders, deleteOrder, getOrdersByUser, getOrderItemsByOrder, getUnDeliveredOrders, getRecentOrders, getOrdersByCompany, getUnDeliveredOrdersByComapny, getDeliveredOrdersByCompany } = require("../controllers/order.controller");
-const { checkRequiredFields, checkCode, checkValidCart } = require("../validation/order.validation");
+const { checkRequiredFields, checkCode, checkValidCart, checkValidTel } = require("../validation/order.validation");
 const { checkIsCompanyAdmin } = require("../../companyUser/Validation/companyUser.validation");
 
 const orderRouter = require("express").Router();
 
-orderRouter.post("/create-order", checkToken, checkRequiredFields, checkValidCart, createOrder);
+orderRouter.post("/create-order", checkToken, checkRequiredFields, checkValidTel, checkValidCart, createOrder);
 orderRouter.get("/all", checkToken, checkIsAdmin, getOrders);
 orderRouter.get("/find-by-company/:companyId", checkToken, getOrdersByCompany);
 orderRouter.get("/find-by-user/:userId", checkToken, getOrdersByUser);
