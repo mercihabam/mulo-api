@@ -33,9 +33,9 @@ async function checkValidCart(req, res, next){
 };
 
 function checkValidTel(req, res, next){
-    const { phoneNumber } = req.body;
+    const { tel } = req.body;
 
-    if(phoneNumber.length < 13){
+    if(tel.length < 13){
         sendResult(res, 500, "Numéro de téléphone incorrect")
     }else{ next() }
 };
