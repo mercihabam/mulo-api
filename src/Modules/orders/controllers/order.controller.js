@@ -43,14 +43,16 @@ async function getOrderItemsByOrder(req, res){
 async function getDeliveredOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: true },
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
-        include: "User"  });
+        include: "User",
+        order: [ [ 'createdAt', "DESC" ] ]  });
     sendResult(res, 200, null, null, orders);
 };
 
 async function getUnDeliveredOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false },
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
-        include: "User"  });
+        include: "User",
+        order: [ [ 'createdAt', "DESC" ] ]  });
     sendResult(res, 200, null, null, orders);
 };
 
@@ -66,25 +68,29 @@ async function getRecentOrders(req, res){
 
 async function getOrdersByCompany(req, res){
     const orders = await Orders.findAndCountAll({ where: { companyId: req.params.companyId, deletedAt: null }, 
-        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0, include: "User"});
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0, include: "User", 
+        order: [ [ 'createdAt', "DESC" ] ]});
     sendResult(res, 200, null, null, orders);
 };
 
 async function getDeliveredOrdersByCompany(req, res){
     const orders = await Orders.findAndCountAll({ where: { companyId: req.params.id, delivered: true, deletedAt: null },
-        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0, include: "User"});
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0, include: "User",
+        order: [ [ 'createdAt', "DESC" ] ]});
     sendResult(res, 200, null, null, orders);
 };
 
 async function getUnDeliveredOrdersByComapny(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, delivered: false, companyId: req.params.id },
-        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0, include: "User"  });
+        limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0, include: "User",
+        order: [ [ 'createdAt', "DESC" ] ]  });
     sendResult(res, 200, null, null, orders);
 };
 
 async function getOrdersByUser(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null, userId: req.params.userId },
-        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0 });
+        limit: parseInt(req.query.limt) || 10, offset: parseInt(req.query.offset) || 0,
+        order: [ [ 'createdAt', "DESC" ] ] });
     sendResult(res, 200, null, null, orders);
 };
 
