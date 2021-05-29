@@ -55,17 +55,17 @@ module.exports = sequelize.define("Companys", {
         required: false
     },
     tel1: {
-        type: Sequelize.INTEGER(),
+        type: Sequelize.STRING(),
         allowNull: false,
         required: true
     },
     tel2: {
-        type: Sequelize.INTEGER(),
+        type: Sequelize.STRING(),
         allowNull: true,
         required: false
     },
     tel3: {
-        type: Sequelize.INTEGER(),
+        type: Sequelize.STRING(),
         allowNull: true,
         required: false
     },

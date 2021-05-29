@@ -39,7 +39,7 @@ module.exports = sequelize.define("Orders", {
         allowNull: true
     },
     phoneNumber: {
-        type: Sequelize.INTEGER(),
+        type: Sequelize.STRING(),
         allowNull: false,
         required: false
     },
