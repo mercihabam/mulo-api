@@ -60,7 +60,7 @@ async function updateMenu(req, res){
 async function getMenus(req, res){
     const menus = await menuModel.findAndCountAll({ include: "Resto", where: { deletedAt: null },
     limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
-    order: [[ "name", "ASC" ]] });
+    order: [[ req.query.orderby || "name", "ASC" ]] });
     sendResult(res, 200, null, null, menus);
 };
 
