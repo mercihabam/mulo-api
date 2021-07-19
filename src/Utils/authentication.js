@@ -53,7 +53,7 @@ function checkToken(req, res, next){
 
     jwt.verify(authToken, process.env.PRIVATE_KEY, async(err, data) =>{
         if(err){
-            sendResult(res, 401, "vous devez posseder un jeton d'accès")
+            sendResult(res, 401, "vous devez vous connecter")
         }else if(data){
             const userId = data.userId;
             const user = await userModel.findOne({ where: { id: userId } });
@@ -61,7 +61,7 @@ function checkToken(req, res, next){
                 req.user = user;
                 next();
             }else{
-                sendResult(res, 403, "jeton d'accès incorrect", null, null);
+                sendResult(res, 403, "vous devez vous connecter", null, null);
             }
         }
     })
@@ -72,7 +72,7 @@ function checkCompanyToken(req, res, next){
 
     jwt.verify(companyToken, process.env.PRIVATE_KEY, async(err, data) =>{
         if(err){
-            sendResult(res, 402, "vous devez posseder un jeton d'accès", null, null)
+            sendResult(res, 402, "veuillez vous connecter", null, null)
         }else if(data){
             const userId = data.userId;
             const company = await companys.findOne({ where: { id: userId } });

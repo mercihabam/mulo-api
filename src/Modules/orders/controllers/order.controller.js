@@ -6,6 +6,7 @@ const OrderItems = require("../../../Database/models/orderItems");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
 const { sendOrderToAdmin } = require("../../Mail/mail.service");
+const { sendSmsOrder } = require("../../../Utils/vonage.utils");
 
 async function createOrder(req, res){
     const { adress, adress2, tel } = req.body;
@@ -14,7 +15,11 @@ async function createOrder(req, res){
     const order = await Orders.create({ id: uuid.v4(), userId: req.user.id, adress: adress, adress2: adress2, phoneNumber: tel, codeDelivery: codeDelivery,
     companyId: req.cart.companyId, cartId: req.cart.id });
     if(order){
-        req.cart.update({ ordered: true });
+        const { tel1, tel2, tel3 } = req.cart.Resto;
+        await req.cart.update({ ordered: true });
+        if(tel1){ sendSmsOrder(tel1, order.codeDelivery) }if(tel2){ sendSmsOrder(tel2, order.codeDelivery) }if(tel3){
+            sendSmsOrder(tel3, order.codeDelivery);
+        }
         sendResult(res, 201, null, "opération effectuée", order);
         sendOrderToAdmin(order.codeDelivery, req.user, "mercihabam@gmail.com");
     }
@@ -23,7 +28,6 @@ async function createOrder(req, res){
 async function getOrders(req, res){
     const orders = await Orders.findAndCountAll({ where: { deletedAt : null },
         limit: parseInt(req.query.limit) || 10, offset: parseInt(req.query.offset) || 0,
-        // orderBy: "-createdAt",
         include: "User"  });
     sendResult(res, 200, null, null, orders);
 };
@@ -130,5 +134,5 @@ module.exports = {
     getOrdersByUser,
     getRecentOrders,
     getDeliveredOrdersByCompany,
-    getUnDeliveredOrdersByComapny
+    getUnDeliveredOrdersByComapny,
 }

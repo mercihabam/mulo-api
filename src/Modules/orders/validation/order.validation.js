@@ -20,7 +20,7 @@ function checkCode(req, res, next){
 async function checkValidCart(req, res, next){
     const { cartId } = req.body;
     if(cartId){
-        const cart = await Cart.findOne({ where: { id: cartId, ordered: false } });
+        const cart = await Cart.findOne({ where: { id: cartId, ordered: false }, include: "Resto" });
         if(cart){
             req.cart = cart;
             next();
