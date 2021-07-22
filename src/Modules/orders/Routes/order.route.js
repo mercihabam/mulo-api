@@ -1,5 +1,5 @@
 const { checkToken, checkIsAdmin } = require("../../../Utils/authentication");
-const { createOrder, getOrders, getOrder, markAsDelivered, getDeliveredOrders, deleteOrder, getOrdersByUser, getOrderItemsByOrder, getUnDeliveredOrders, getRecentOrders, getOrdersByCompany, getUnDeliveredOrdersByComapny, getDeliveredOrdersByCompany } = require("../controllers/order.controller");
+const { createOrder, getOrders, getOrder, markAsDelivered, getDeliveredOrders, deleteOrder, getOrdersByUser, getOrderItemsByOrder, getUnDeliveredOrders, getRecentOrders, getOrdersByCompany, getUnDeliveredOrdersByComapny, getDeliveredOrdersByCompany, sendSms } = require("../controllers/order.controller");
 const { checkRequiredFields, checkCode, checkValidCart, checkValidTel } = require("../validation/order.validation");
 const { checkIsCompanyAdmin } = require("../../companyUser/Validation/companyUser.validation");
 
@@ -18,5 +18,6 @@ orderRouter.get("/undelivered-orders-by-company/:id", checkToken, getUnDelivered
 orderRouter.get("/undelivered-orders", checkToken, checkIsAdmin, getUnDeliveredOrders);
 orderRouter.get("/recent-orders", checkToken, checkIsAdmin, getRecentOrders);
 orderRouter.get("/delete-order/:orderId", checkToken, checkIsAdmin, deleteOrder);
+orderRouter.get('/sms', sendSms)
 
 module.exports = orderRouter;

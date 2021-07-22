@@ -6,7 +6,7 @@ const OrderItems = require("../../../Database/models/orderItems");
 const { sendResult } = require("../../../Utils/helper");
 const uuid = require("uuid");
 const { sendOrderToAdmin } = require("../../Mail/mail.service");
-const { sendSmsOrder } = require("../../../Utils/vonage.utils");
+const { sendOrderSms } = require('../../../Services/sms.services');
 
 async function createOrder(req, res){
     const { adress, adress2, tel } = req.body;
@@ -17,8 +17,8 @@ async function createOrder(req, res){
     if(order){
         const { tel1, tel2, tel3 } = req.cart.Resto;
         await req.cart.update({ ordered: true });
-        if(tel1){ sendSmsOrder(tel1, order.codeDelivery) }if(tel2){ sendSmsOrder(tel2, order.codeDelivery) }if(tel3){
-            sendSmsOrder(tel3, order.codeDelivery);
+        if(tel1){ sendOrderSms(tel1, order.codeDelivery) }if(tel2){ sendOrderSms(tel2, order.codeDelivery) }if(tel3){
+            sendOrderSms(tel3, order.codeDelivery);
         }
         sendResult(res, 201, null, "opération effectuée", order);
         sendOrderToAdmin(order.codeDelivery, req.user, "mercihabam@gmail.com");
@@ -119,6 +119,10 @@ async function deleteOrder(req, res){
         const updated = await order.update({ deletedAt: new Date() });
         if(updated){ sendResult(res, 200, null, "commande supprimé", order); };
     }else{ sendResult(res, 404, "order not found", null, null) }
+};
+
+function sendSms(req, res){
+    sendOrderSms('+243977426917', '049859')
 }
 
 module.exports = {
@@ -135,4 +139,5 @@ module.exports = {
     getRecentOrders,
     getDeliveredOrdersByCompany,
     getUnDeliveredOrdersByComapny,
+    sendSms
 }
