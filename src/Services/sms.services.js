@@ -1,3 +1,4 @@
+require('dotenv').config();
 const twilio = require("../Utils/twilio");
 
 function sendOrderSms(to, deliveryCode){
