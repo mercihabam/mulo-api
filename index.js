@@ -13,7 +13,7 @@ require("./src/Database/connection/connection");
 //association
 require("./src/Database/associations/association");
 
-const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', 'https://lmg-shop.netlify.app/' ]
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', 'https://lmg-shop.netlify.app' ]
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
