@@ -13,7 +13,7 @@ require("./src/Database/connection/connection");
 //association
 require("./src/Database/associations/association");
 
-const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', ]
+const whitelist = ['https://mulo-food.herokuapp.com', 'http://localhost:3000', 'https://lmg-shop.netlify.app/' ]
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 app.use("/public", express.static('public'));
-app.use(cors('*'));
+app.use(cors(corsOptions));
 
 //Routes
 app.use("/Api/v1", Routes);
