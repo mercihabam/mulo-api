@@ -1,5 +1,6 @@
 from knox.models import AuthToken
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from accounts.serializers import LoginSerializer, UserSerializer
@@ -15,3 +16,10 @@ def login_view(request):
         'token': token[1],
         'uer': user.data
     })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_logged_in_user(request):
+    serializer = UserSerializer(request.user)
+    return Response(status=200, data=serializer.data)
