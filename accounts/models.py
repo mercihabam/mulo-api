@@ -34,7 +34,8 @@ class Account(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True)
-
+    is_verified = models.BooleanField(default=False)
+    code = models.CharField(max_length=6, null=True, blank=True)
     username = None
 
     REQUIRED_FIELDS = []
