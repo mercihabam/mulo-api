@@ -4,27 +4,27 @@ from core.settings import DEFAULT_FROM_EMAIL
 
 
 def send_register_code_mail(user_data, code):
-    subject = f'Verify your email address'
-    html_msg = f"""MULO needs you to verify your email address {code}  this is your validation code
-    <div style="width: 70%; margin: 0 auto; font-family: sans-serif;">
-        <nav style="background-color: #c4c4c4; padding: 0.1rem;">
-            <h1 style="text-align: center;">MULO needs you to verify your email address</h1>
+    subject = f'Veillez valider votre compte'
+    html_msg = f"""
+    <div style="width: 80%; margin: 0 auto; font-family: sans-serif;">
+        <nav style="background-color: #c4c4c4;">
+            <h1 style="text-align: left;">MULO vous demande de vérifier votre adresse e-mail</h1>
         </nav>
-        <div style="padding: 2rem;">
-            <h2>Hi {user_data['first_name']} {user_data['last_name']}!</h2>
-        <p>You recently registered on MULO, we sent you this email in order to verify if the email you provided us is viable,
-            for the sake of security and better services you receive from MULO!</p>
-        <p>Kindly copy the code below, so that we will know that this email belongs to you. Keep in mind that you need to always remember your email
-            and password you used and don’t share it with anyone else!</p>
-            <div style="padding: 1rem 0 1rem 0;">
-            <p style="background-color: #861A02; color: #ffffff; width: 40%; padding: 0.8rem; text-decoration: none; border-radius: 0.2rem;">
-                {code}This your validation code
-            </p>
+        <div style="margin-top: 2rem;">
+            <h2>Bonjour {user_data['first_name']} {user_data['last_name']}!</h2> <p>Vous vous êtes récemment inscrit 
+            sur MULO, nous vous avons envoyé cet email afin de vérifier si l'email que vous nous avez fourni est 
+            viable, pour des raisons de sécurité et pour améliorer les services que vous recevez de MULO !</p> 
+            <p>Veuillez copier le code ci-dessous, afin que nous sachions que cet e-mail vous appartient et valider 
+            votre compte. Gardez à l'esprit que vous devez toujours vous souvenir de l'e-mail et du mot de passe que 
+            vous avez utilisés et ne les partagez avec personne d'autre !</p> <div style="padding: 1rem 0 1rem 0;"> 
+            <h2 style="background-color: rgb(6, 143, 6); text-align: center; color: #ffffff; padding: 0.8rem; 
+            border-radius: 0.2rem;"> {code} 
+            </h2>
             </div>
-            <p>If you didn’t register on MULO system recently,
-            we are sorry for that inconvenience, ignore this email!</p>
+            <p>Si vous ne vous êtes pas enregistré sur MULO récemment,
+            nous sommes désolés pour ce désagrément, ignorez cet email !</p>
             <div>
-            <p>Yours truly,</p>
+            <p>Cordialement,</p>
             <p>MULO</p>
             </div>
         </div>
@@ -36,6 +36,6 @@ def send_register_code_mail(user_data, code):
     return send_mail(
         subject=subject, from_email=DEFAULT_FROM_EMAIL,
         html_message=html_msg,
-        recipient_list=user_data.email,
+        recipient_list=[user_data['email']],
         message="Verification code"
     )
