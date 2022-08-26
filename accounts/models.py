@@ -30,7 +30,6 @@ class UserManager(BaseUserManager):
 
 class Account(AbstractUser):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    full_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True)

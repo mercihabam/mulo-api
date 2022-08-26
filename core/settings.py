@@ -141,3 +141,12 @@ AUTH_USER_MODEL = "accounts.Account"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
 }
+
+# Smtp config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get("SMTP_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = os.environ.get('SMTP_PORT')
+EMAIL_HOST_USER = os.environ.get('SMTP_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('SMTP_PASS')
+DEFAULT_FROM_EMAIL = f'Mulo <{EMAIL_HOST_USER}>'
