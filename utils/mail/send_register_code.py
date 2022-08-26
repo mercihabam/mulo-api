@@ -4,7 +4,7 @@ from core.settings import DEFAULT_FROM_EMAIL
 
 
 def send_register_code_mail(user_data, code):
-    subject = f'Veillez valider votre compte'
+    subject = f'Veuillez valider votre compte'
     html_msg = f"""
     <div style="width: 80%; margin: 0 auto; font-family: sans-serif;">
         <nav style="background-color: #c4c4c4;">
